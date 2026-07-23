@@ -1,0 +1,7 @@
+"Date,Department,CostCenter,ExpenseCategory,BudgetedAmount,ForecastScenario"
+"2024-01-01,R&D,CC-101,Software Licenses,4500000,Base Case"
+"2024-01-01,Sales,CC-202,Marketing Campaigns,12000000,Base Case"
+"2024-07-01,R&D,CC-101,Hardware Infrastructure,8500000,Upside Case"
+"2025-01-01,Sales,CC-202,Marketing Campaigns,13500000,Base Case"
+"2025-01-01,Operations,CC-404,Logistics Realignment,15000000,Base Case"
+"2026-01-01,R&D,CC-101,AI Infrastructure,20000000,Upside Case"
