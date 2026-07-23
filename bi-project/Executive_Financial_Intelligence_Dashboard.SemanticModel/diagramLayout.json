@@ -1,0 +1,256 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 64.800003051757813
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 23,
+            "y": 0
+          },
+          "nodeIndex": "dCalendar",
+          "nodeLineageTag": "a74aa84d-aeb6-4b04-8cfc-c8eb91e82c7f",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 273.16035804413832,
+            "y": 512.79213361449933
+          },
+          "nodeIndex": "fBalanceSheet",
+          "nodeLineageTag": "100767a6-44af-4932-8d1c-24c792251f69",
+          "size": {
+            "height": 291.54400111656651,
+            "width": 234
+          },
+          "zIndex": 18
+        },
+        {
+          "location": {
+            "x": 318.23694758163685,
+            "y": 182.22343971357782
+          },
+          "nodeIndex": "fCashFlow",
+          "nodeLineageTag": "881b43de-a7ec-4243-a13e-2861649396dc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1274.3596638392528,
+            "y": 287
+          },
+          "nodeIndex": "fIncomeStatement",
+          "nodeLineageTag": "b7e8e35d-b21d-48da-9829-919aea63047f",
+          "size": {
+            "height": 203.52268415954387,
+            "width": 235.36266741104441
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 300.42702477373768
+          },
+          "nodeIndex": "fIncomeStatementForecast",
+          "nodeLineageTag": "f1e71ecb-ad22-4d4a-8266-6b0fd02f2895",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 1263.3882584309929,
+            "y": 154.66968292359229
+          },
+          "nodeIndex": "fMarketData",
+          "nodeLineageTag": "8e83e334-9d09-4a07-90e5-bdf12bbd04e5",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 910.81456217025016,
+            "y": 289.25652143750631
+          },
+          "nodeIndex": "dVersion",
+          "nodeLineageTag": "99dd45fb-2e68-4dca-9279-11651c5f24d8",
+          "size": {
+            "height": 145,
+            "width": 234
+          },
+          "zIndex": 15
+        },
+        {
+          "location": {
+            "x": 1501.3785435796481,
+            "y": 0
+          },
+          "nodeIndex": "dMacroAssumptions",
+          "nodeLineageTag": "b29c5d58-17a8-48bb-86a1-077be23667d2",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 1748.386392235308,
+            "y": 153.43578240495617
+          },
+          "nodeIndex": "_CoreFinancialMetrics",
+          "nodeLineageTag": "d69639b0-d8b4-4640-bdc1-ab1210f39918",
+          "size": {
+            "height": 154.86533203067228,
+            "width": 211.45066964417765
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 465.41324168709957,
+            "y": 0
+          },
+          "nodeIndex": "fInternalBudgets",
+          "nodeLineageTag": "2ebb61e8-3591-4f8a-bc5c-8a386486ad39",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1264.4193997946188,
+            "y": 0
+          },
+          "nodeIndex": "ShareOutstanding",
+          "nodeLineageTag": "e1daeecc-1498-4ade-8332-5757d8f2188c",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1742.4385979034296,
+            "y": 0
+          },
+          "nodeIndex": "MarketCap",
+          "nodeLineageTag": "eabef623-2699-421a-9014-ae28df7cd0e5",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 845.17467602602756,
+            "y": 468.48670085669391
+          },
+          "nodeIndex": "dAccount",
+          "nodeLineageTag": "b2e8e35d-9901-48d3-8acf-7904625aa617",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1500.163347010644,
+            "y": 227.90717860812617
+          },
+          "nodeIndex": "dValuationMetrics",
+          "nodeLineageTag": "93c8fc62-0aab-4c97-b5b8-58bae5287884",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 998.52778422960864,
+            "y": 18.998678117722193
+          },
+          "nodeIndex": "dScenario",
+          "nodeLineageTag": "8257707f-3e53-440e-9068-6c045d6f1a48",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 1739.4924399115257,
+            "y": 308.35096593711762
+          },
+          "nodeIndex": "Titles",
+          "nodeLineageTag": "d5b0ac7e-df6a-4275-a44e-fd6de556aef2",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1500.2581353458213,
+            "y": 422.80496642055436
+          },
+          "nodeIndex": "WACC_Adjustment",
+          "nodeLineageTag": "5d8c54db-3c52-4097-9707-b1949c8dac57",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 1270.5575684445389,
+            "y": 479.602194075091
+          },
+          "nodeIndex": "Parameter",
+          "nodeLineageTag": "b3c5b98e-27ed-489e-838c-a502af925c47",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

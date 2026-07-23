@@ -1,0 +1,39 @@
+table dScenario
+	lineageTag: 8257707f-3e53-440e-9068-6c045d6f1a48
+
+	column ScenarioKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 37a851f9-cf67-45fc-ba3f-fa7ac8c26db9
+		summarizeBy: count
+		sourceColumn: ScenarioKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioName
+		dataType: string
+		lineageTag: 2b466b0c-814c-4b3e-9fae-af46bed977cd
+		summarizeBy: none
+		sourceColumn: ScenarioName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dScenario = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlTSUXJMLilNzFGK1YlWMgJynUpT0lNLwFxjINctvyg1ObEYImACFPAvKMnMzSwuyUxWcHF2AwubAoUDUouL0cXN4KYrhCXmlCaWZObnKcXGAgA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [ScenarioKey = _t, ScenarioName = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"ScenarioKey", Int64.Type}, {"ScenarioName", type text}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

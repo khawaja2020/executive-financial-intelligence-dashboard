@@ -1,0 +1,1155 @@
+table _CoreFinancialMetrics
+	lineageTag: d69639b0-d8b4-4640-bdc1-ab1210f39918
+
+	measure Unified_Financial_Metric = ```
+			
+			VAR SelectedScenario = SELECTEDVALUE('dScenario'[ScenarioName], "Actual")
+			VAR SelectedVersion = SELECTEDVALUE('dVersion'[VersionName], "Base Case")
+			VAR CurrentStatement = SELECTEDVALUE('dAccount'[FinancialStatement])
+			VAR CurrentAccountHead = SELECTEDVALUE('dAccount'[AccountHead])
+			
+			-- Only Cash Flow needs _CF suffix removed
+			VAR FactAccountHead = 
+			    IF(
+			        CurrentStatement = "Cash Flow",
+			        SWITCH(
+			            CurrentAccountHead,
+			            "netIncome_CF", "netIncome",
+			            "depreciationAndAmortization_CF", "depreciationAndAmortization",
+			            "accountsPayables_CF", "accountsPayables",
+			            CurrentAccountHead
+			        ),
+			        CurrentAccountHead
+			    )
+			
+			-------------------------------------------------------------------------
+			-- A. INCOME STATEMENT
+			-------------------------------------------------------------------------
+			VAR IS_Actual = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        VALUE('fIncomeStatementForecast'[IsForecast]) = 0,
+			        'fIncomeStatementForecast'[AccountHead] = FactAccountHead
+			    )
+			
+			VAR IS_Forecast = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        VALUE('fIncomeStatementForecast'[IsForecast]) = 1,
+			        'fIncomeStatementForecast'[AccountHead] = FactAccountHead
+			    )
+			
+			-- Map AccountHead to Department for budget aggregation
+			VAR BudgetFilterDepartment = 
+			    SWITCH(
+			        CurrentAccountHead,
+			        "researchAndDevelopmentExpenses", "R&D",
+			        "sellingAndMarketingExpenses", BLANK(),
+			        "sellingGeneralAndAdministrativeExpenses", "Sales",
+			        "operatingExpenses", "Operations",
+			        BLANK()
+			    )
+			
+			VAR IS_Budget = 
+			    IF(
+			        ISBLANK(BudgetFilterDepartment),
+			        BLANK(),
+			        CALCULATE(
+			            SUM('fInternalBudgets'[BudgetAmount]), 
+			            'fInternalBudgets'[ForecastScenario] = SelectedVersion,
+			            'fInternalBudgets'[Department] = BudgetFilterDepartment
+			            )
+			    )
+			
+			VAR IS_Final = 
+			    SWITCH(
+			        SelectedScenario,
+			        "Actual", IS_Actual,
+			        "Forecast", IS_Forecast,
+			        "Budget", IS_Budget,
+			        BLANK()
+			    )
+			
+			-------------------------------------------------------------------------
+			-- B. BALANCE SHEET
+			-------------------------------------------------------------------------
+			VAR BS_Final = 
+			    IF(
+			        SelectedScenario = "Actual", 
+			        CALCULATE(
+			            SUM('fBalanceSheet'[Amount]),
+			            'fBalanceSheet'[AccountHead] = FactAccountHead
+			        ), 
+			        BLANK()
+			    )
+			
+			-------------------------------------------------------------------------
+			-- C. CASH FLOW
+			-------------------------------------------------------------------------
+			VAR CF_Final = 
+			    IF(
+			        SelectedScenario = "Actual", 
+			        CALCULATE(
+			            SUM('fCashFlow'[Amount]),
+			            'fCashFlow'[AccountHead] = FactAccountHead
+			        ), 
+			        BLANK()
+			    )
+			
+			-------------------------------------------------------------------------
+			-- D. RETURN
+			-------------------------------------------------------------------------
+			RETURN
+			    SWITCH(
+			        CurrentStatement,
+			        "Income Statement", IS_Final,
+			        "Balance Sheet", BS_Final,
+			        "Cash Flow", CF_Final,
+			        BLANK()
+			    )
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4d27b913-a723-4014-abf8-083b7beed5cf
+
+	measure Ratio_Current = ```
+			
+			-- 1. Calculate Total Current Assets by filtering the unpivoted table
+			VAR CurrentAssets = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalCurrentAssets"
+			    )
+			
+			-- 2. Calculate Total Current Liabilities by filtering the unpivoted table
+			VAR CurrentLiabilities = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalCurrentLiabilities"
+			    )
+			
+			-- 3. Safely divide the two values to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(CurrentAssets, CurrentLiabilities, 0)
+			
+			
+			```
+		lineageTag: b10e0f1e-83d0-4847-b6f8-b30b9585b7dd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_Quick = ```
+			
+			-- 1. Calculate Total Current Assets
+			VAR CurrentAssets = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalCurrentAssets"
+			    )
+			
+			-- 2. Calculate Inventory to exclude
+			VAR Inventory = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "inventory"
+			    )
+			
+			-- 3. Calculate Total Current Liabilities
+			VAR CurrentLiabilities = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalCurrentLiabilities"
+			    )
+			
+			-- 4. Subtract inventory and safely divide
+			VAR QuickAssets = CurrentAssets - Inventory
+			RETURN
+			    DIVIDE(QuickAssets, CurrentLiabilities, 0)
+			
+			```
+		lineageTag: c124ed1a-a4b6-4a81-9f2c-a790a8a58fec
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_DebtToEquity = ```
+			
+			-- 1. Calculate Total Debt by filtering the unpivoted table
+			VAR TotalDebt = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalDebt"
+			    )
+			
+			-- 2. Calculate Total Equity by filtering the unpivoted table
+			VAR TotalEquity = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalEquity"
+			    )
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(TotalDebt, TotalEquity, 0)
+			
+			```
+		lineageTag: fd948963-f183-45e3-be3d-4fbe4e08920d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_EquityMultiplier = ```
+			
+			 
+			-- 1. Calculate Total Asset by filtering the unpivoted table
+			VAR TotalAsset = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalAssets"
+			    )
+			
+			-- 2. Calculate Total Equity by filtering the unpivoted table
+			VAR TotalEquity = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalEquity"
+			    )
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(TotalAsset, TotalEquity, 0)
+			
+			
+			```
+		lineageTag: 3939e2ea-a182-4e8d-8145-89d2b4965514
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_InterestCoverage = ```
+			
+			
+			-- 1. Calculate Operating Income by filtering the unpivoted table
+			VAR OperatingIncome = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Operating Income"
+			    )
+			
+			-- 2. Calculate Interest Expense by filtering the unpivoted table
+			VAR InterestExpense = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Interest Expense"
+			    )
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(OperatingIncome, InterestExpense, 0)
+			```
+		lineageTag: ed6a19f0-c522-4f7b-86ee-f15692eed26e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Metric_BookValuePerShare = ```
+			
+			
+			-- 1. Calculate Total Equity by filtering the unpivoted table
+			VAR TotalEquity = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalEquity"
+			    )
+			
+			-- 2. Calculate Shares Outstanding using SharesOutstanding table
+			VAR SharesOutstanding = 
+			    MAX('ShareOutstanding'[NumberOfShares])
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(TotalEquity, SharesOutstanding, 0)
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3322536d-e6d6-4dd6-9b26-47b583468ae4
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Ratio_PriceToBook = ```
+			
+			DIVIDE(
+			    MAX('fMarketData'[Price]), 
+			    [Metric_BookValuePerShare], 
+			    0
+			)
+			
+			```
+		lineageTag: 61638a74-7492-4eda-bc4f-ca7e4b976c57
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_TrailingPE = ```
+			
+			-- 1. Grab the current stock price from your market data table
+			VAR StockPrice = MAX('fMarketData'[Price])
+			
+			-- 2. Extract the EPS amount by filtering the unpivoted income statement table
+			VAR EarningsPerShare = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "EPS"
+			    )
+			
+			-- 3. Safely divide stock price by EPS to compute the trailing P/E ratio
+			RETURN
+			    DIVIDE(StockPrice, EarningsPerShare, 0)
+			
+			```
+		lineageTag: 9286d950-5bcf-459f-bac9-3ee51fee4e90
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_AssetTurnover = ```
+			
+			-- 1. Calculate Revenue by filtering the unpivoted table
+			VAR Revenue = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Revenue"
+			    )
+			
+			-- 2. Calculate Total Assets by filtering the unpivoted table
+			VAR TotalAssets = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalassets"
+			    )
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(Revenue, TotalAssets, 0)
+			```
+		lineageTag: 28b26c4c-351f-4ef7-8090-fd644bbf486c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_NetProfitMargin = ```
+			
+			-- 1. Calculate Net Income by filtering the unpivoted table
+			VAR NetProfit = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Net Income"
+			    )
+			
+			-- 2. Calculate Revenue by filtering the unpivoted table
+			VAR Revenue = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Revenue"
+			    )
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(NetProfit, Revenue, 0)
+			```
+		lineageTag: fd221f9c-bc6a-4a3b-84f6-a6e9f14bc036
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_GrossProfitMargin = ```
+			
+			-- 1. Calculate Gross Profit by filtering the unpivoted table
+			VAR GrossProfit = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Gross Profit"
+			    )
+			
+			-- 2. Calculate Revenue by filtering the unpivoted table
+			VAR Revenue = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Revenue"
+			    )
+			
+			-- 3. Safely divide to avoid divide-by-zero errors
+			RETURN
+			    DIVIDE(GrossProfit, Revenue, 0)
+			
+			```
+		lineageTag: a75e299c-bd07-49dd-b9ae-9306b14e0596
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Ratio_ReturnOnEquity_DuPont =
+			
+			[Ratio_NetProfitMargin] * [Ratio_AssetTurnover] * [Ratio_EquityMultiplier]
+		formatString: #,0
+		lineageTag: 2652df00-5e4c-4e4b-b27c-28248fb2947d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Tax Rate' = ```
+			
+			-- 1. Calculate Pre-Tax Income by filtering your unpivoted table
+			VAR PreTaxIncome = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "incomeBeforeTax"
+			    )
+			
+			-- 2. Calculate Tax Expense by filtering your unpivoted table
+			VAR TaxExpense = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "incomeTaxExpense"
+			    )
+			
+			-- 3. Return a blank if there is no profit, otherwise safely divide
+			RETURN
+			    IF(
+			        PreTaxIncome <= 0, 
+			        BLANK(), 
+			        DIVIDE(TaxExpense, PreTaxIncome, 0)
+			    )
+			
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8348e8e1-4a3c-435d-87a3-c30c7c76e3b2
+
+	measure Revenue_YTD = ```
+			
+			TOTALYTD(
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Revenue"
+			    ), 
+			    'dCalendar'[Date], 
+			    "09/30"
+			)
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 441c5c51-7398-49f7-a1c7-f68f10a56737
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Revenue_YoY_Growth = ```
+			
+			VAR CurrentYTD = [Revenue_YTD]
+			VAR PriorYTD = CALCULATE([Revenue_YTD], DATEADD('dCalendar'[Date],-1,YEAR))
+			RETURN DIVIDE(CurrentYTD - PriorYTD, PriorYTD, 0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 29c73050-1704-4719-914c-6c14f2959627
+
+	measure Revenue_QTD = ```
+			
+			TOTALQTD(
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Revenue"
+			    ), 
+			    'dCalendar'[Date]
+			)
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d5956a45-b78d-4165-b627-9c55e8eadb8e
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Revenue_MTD = ```
+			
+			TOTALMTD(
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Revenue"
+			    ), 
+			    'dCalendar'[Date]
+			)
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d162693f-4d1e-4673-9331-26ad87fc5077
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure WACC_Engine = ```
+			
+			-- 1. Identify your last historical year to isolate current balance sheet metrics
+			VAR LastActualYear = 
+			    CALCULATE(
+			        MAX('dCalendar'[Year]), 
+			        'fIncomeStatementForecast'[IsForecast] = 0, 
+			        REMOVEFILTERS()
+			    )
+			
+			-- 2. Calculate Cost of Equity (CAPM)
+			VAR CostOfEquity = 
+			    MAX('dMacroAssumptions'[RiskFreeRate]) + 
+			    (MAX('dMacroAssumptions'[IndustryBeta]) * MAX('dMacroAssumptions'[MarketRiskPremium]))
+			
+			-- 3. Extract Interest Expense and Total Debt for the current calculation period
+			VAR InterestExpense = 
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]), 
+			        'dAccount'[AccountHead] = "Interest Expense",
+			        'dCalendar'[Year] = LastActualYear
+			    )
+			
+			VAR TotalDebt = 
+			    CALCULATE(
+			        SUM('fBalanceSheet'[Amount]), 
+			        'dAccount'[AccountHead] = "totalDebt",
+			        'dCalendar'[Year] = LastActualYear
+			    )
+			
+			-- 4. Calculate After-Tax Cost of Debt
+			VAR PreTaxCostOfDebt = DIVIDE(InterestExpense, TotalDebt, 0)
+			VAR CostOfDebt = PreTaxCostOfDebt * (1 - MAX('dMacroAssumptions'[CorporateTaxRate]))
+			
+			-- 5. Calculate Capital Structure Weights
+			VAR MarketCapValue = MAX('MarketCap'[MarketCap])
+			VAR TotalCapital = MarketCapValue + TotalDebt
+			VAR EquityWeight = DIVIDE(MarketCapValue, TotalCapital, 0)
+			
+			-- 6. Execute WACC
+			 RETURN 
+			    (CostOfEquity * EquityWeight) + (CostOfDebt * (1 - EquityWeight))
+			
+			```
+		formatString: #,0.00%;-#,0.00%;#,0.00%
+		lineageTag: 9e562bd5-e206-48d3-8adf-88c2efe13853
+
+	measure Master_Discounted_FCF = ```
+			
+			-- 1. Scan whichever calendar or forecast year column is actively used in your visual rows
+			VAR CurrentYear = 
+			    COALESCE(
+			        SELECTEDVALUE('dCalendar'[Year]), 
+			        SELECTEDVALUE('fIncomeStatementForecast'[Year])
+			    )
+			
+			-- 2. Force the calculation to lock onto 2025 as the absolute baseline anchor
+			VAR YearIndex = CurrentYear - 2025
+			VAR WACC = [WACC_Adjustment Value] 
+			VAR FCF = [Dynamic_Free_Cash_Flow]
+			
+			-- 3. Execute the exact single-year math row-by-row
+			RETURN
+			    IF(
+			        YearIndex > 0 && FCF > 0,
+			        DIVIDE(FCF, POWER(1 + WACC, YearIndex), 0),
+			        BLANK()
+			    )
+			
+			```
+		formatString: #,0
+		lineageTag: 63827a8f-2efc-4a01-8a98-881f57adfb6b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure Project_ROI_Annual = ```
+			
+			VAR CurrentYearRow = COALESCE(SELECTEDVALUE('dCalendar'[Year]), SELECTEDVALUE('fIncomeStatementForecast'[Year]))
+			
+			-- 1. Build a clean, isolated running list of years from 2021 up to the current row
+			VAR TimelineHorizon = 
+			    FILTER(
+			        ALLSELECTED('dCalendar'[Year]),
+			        'dCalendar'[Year] >= 2021 && 'dCalendar'[Year] <= CurrentYearRow
+			    )
+			
+			-- 2. Extract historical base parameters directly from the fact tables to establish conversion factor
+			VAR HistNetIncome = CALCULATE(SUM('fIncomeStatementForecast'[Amount]), 'fIncomeStatementForecast'[IsForecast] = 0, 'fIncomeStatementForecast'[AccountHead] = "Net Income", REMOVEFILTERS())
+			VAR HistFCF = CALCULATE(SUM('fCashFlow'[Amount]), 'fCashFlow'[AccountHead] = "freeCashFlow", REMOVEFILTERS())
+			VAR CashConversionRate = DIVIDE(HistFCF, HistNetIncome, 0)
+			
+			VAR HistCapEx = CALCULATE(ABS(SUM('fCashFlow'[Amount])), 'fCashFlow'[AccountHead] = "capitalExpenditure", REMOVEFILTERS())
+			VAR CapExIntensityRate = DIVIDE(HistCapEx, HistNetIncome, 0)
+			
+			-- 3. Run a pure, unhindered loop in memory to build the cumulative cash and capex pools
+			VAR CumulativeCashInflows = 
+			    SUMX(
+			        TimelineHorizon,
+			        VAR LoopYear = 'dCalendar'[Year]
+			        VAR ActualFCF = CALCULATE(SUM('fCashFlow'[Amount]), 'fCashFlow'[AccountHead] = "freeCashFlow", 'dCalendar'[Year] = LoopYear, REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'))
+			        VAR ForecastNetIncome = CALCULATE(SUM('fIncomeStatementForecast'[Amount]), 'fIncomeStatementForecast'[IsForecast] = 1, 'fIncomeStatementForecast'[AccountHead] = "Net Income", 'dCalendar'[Year] = LoopYear, REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'))
+			        VAR ProjectedFCF = ForecastNetIncome * CashConversionRate
+			        RETURN
+			            IF(LoopYear <= 2025, ActualFCF, ProjectedFCF)
+			    )
+			
+			VAR CumulativeCapExOutlays = 
+			    SUMX(
+			        TimelineHorizon,
+			        VAR LoopYear = 'dCalendar'[Year]
+			        VAR ActualCapEx = CALCULATE(ABS(SUM('fCashFlow'[Amount])), 'fCashFlow'[AccountHead] = "capitalExpenditure", 'dCalendar'[Year] = LoopYear, REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'))
+			        VAR ForecastNetIncome = CALCULATE(SUM('fIncomeStatementForecast'[Amount]), 'fIncomeStatementForecast'[IsForecast] = 1, 'fIncomeStatementForecast'[AccountHead] = "Net Income", 'dCalendar'[Year] = LoopYear, REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'))
+			        VAR ProjectedCapEx = ForecastNetIncome * CapExIntensityRate
+			        RETURN
+			            IF(LoopYear <= 2025, ActualCapEx, ProjectedCapEx)
+			    )
+			
+			-- 4. Calculate your clean financial return percentage without any double-subtraction bugs
+			RETURN 
+			    IF(
+			        NOT(ISBLANK(CurrentYearRow)) && CumulativeCapExOutlays > 0,
+			        DIVIDE(CumulativeCashInflows - CumulativeCapExOutlays, CumulativeCapExOutlays, 0),
+			        BLANK()
+			    )
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b8ba704c-a684-43ee-91ff-00dd21aee2f4
+
+	measure Dynamic_Free_Cash_Flow =
+			
+			VAR CurrentYear = MAX('dCalendar'[Year])
+			VAR SelectedScenario = SELECTEDVALUE('dScenario'[ScenarioName], "Forecast")
+			VAR ScenarioMultiplier =
+			    SWITCH(
+			        SelectedScenario,
+			        "Optimistic DCF", 1.15,
+			        "Pessimistic DCF", 0.85,
+			        1.00
+			    )
+			
+			VAR HistNetIncome =
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]),
+			        'fIncomeStatementForecast'[IsForecast] = 0,
+			        'fIncomeStatementForecast'[AccountHead] = "Net Income",
+			        REMOVEFILTERS()
+			    )
+			
+			VAR HistFCF =
+			    CALCULATE(
+			        SUM('fCashFlow'[Amount]),
+			        'fCashFlow'[AccountHead] = "freeCashFlow",
+			        REMOVEFILTERS()
+			    )
+			
+			VAR CashConversionRate =
+			    DIVIDE(HistFCF, HistNetIncome, 0)
+			
+			VAR ActualFCF =
+			    CALCULATE(
+			        SUM('fCashFlow'[Amount]),
+			        'fCashFlow'[AccountHead] = "freeCashFlow",
+			        'dCalendar'[Year] = CurrentYear
+			    )
+			
+			VAR ForecastNetIncome =
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]),
+			        'fIncomeStatementForecast'[IsForecast] = 1,
+			        'fIncomeStatementForecast'[AccountHead] = "Net Income",
+			        'dCalendar'[Year] = CurrentYear,
+			        REMOVEFILTERS()
+			    )
+			
+			VAR ForecastFCF =
+			    ForecastNetIncome * CashConversionRate * ScenarioMultiplier
+			
+			RETURN
+			    IF(
+			        CurrentYear <= 2025,
+			        ActualFCF,
+			        ForecastFCF
+			    )
+		formatString: #,0
+		lineageTag: b1be117c-2fdd-474a-bf0a-68df111e30c3
+
+	measure Budget_Variance_vs_Actual = ```
+			
+			VAR CurrentAccountHead = SELECTEDVALUE('dAccount'[AccountHead])
+			
+			RETURN
+			    IF(
+			        NOT(CurrentAccountHead IN {"researchAndDevelopmentExpenses", "sellingGeneralAndAdministrativeExpenses", "operatingExpenses"}),
+			        BLANK(),
+			        
+			        VAR ActualValue = 
+			            CALCULATE(
+			                [Unified_Financial_Metric],
+			                TREATAS({"Actual"}, 'dScenario'[ScenarioName])
+			            )
+			        
+			        VAR BudgetValue = 
+			            CALCULATE(
+			                [Unified_Financial_Metric],
+			                TREATAS({"Budget"}, 'dScenario'[ScenarioName])
+			            )
+			        
+			        RETURN BudgetValue - ActualValue
+			    )
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 7cd0c65f-8205-4a08-bad3-43414ea82460
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Dynamic_Annual_CapEx =
+			
+			VAR Y = MAX('dCalendar'[Year])
+			RETURN
+			IF(
+			    Y <= 2025,
+			    CALCULATE(
+			        ABS(SUM('fCashFlow'[Amount])),
+			        'fCashFlow'[AccountHead] = "capitalExpenditure",
+			        'dCalendar'[Year] = Y
+			    ),
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]),
+			        'fIncomeStatementForecast'[IsForecast] = 1,
+			        'fIncomeStatementForecast'[AccountHead] = "Net Income",
+			        'dCalendar'[Year] = Y
+			    )
+			    *
+			    DIVIDE(
+			        CALCULATE(
+			            ABS(SUM('fCashFlow'[Amount])),
+			            'fCashFlow'[AccountHead] = "capitalExpenditure",
+			            REMOVEFILTERS()
+			        ),
+			        CALCULATE(
+			            SUM('fIncomeStatementForecast'[Amount]),
+			            'fIncomeStatementForecast'[IsForecast] = 0,
+			            'fIncomeStatementForecast'[AccountHead] = "Net Income",
+			            REMOVEFILTERS()
+			        ),
+			        0
+			    )
+			)
+		formatString: #,0.00
+		lineageTag: d8adc3e1-9099-4b95-9b71-5a1a94d8369a
+
+	measure Dynamic_Payback_Period = ```
+			
+			-- 1. Dynamically target the specific year's CapEx budget from the matrix row
+			VAR CurrentYear = MAX('dCalendar'[Year])
+			VAR TargetInvestment = [Dynamic_Annual_CapEx]
+			
+			-- Only evaluate if there is an active CapEx investment to recover
+			RETURN
+			IF(
+			    TargetInvestment > 0,
+			    VAR YearHorizon = 
+			        FILTER(
+			            ALL('dCalendar'[Year]), 
+			            'dCalendar'[Year] >= CurrentYear && 'dCalendar'[Year] <= 2030
+			        )
+			
+			    -- 2. Build a running total of cash generated strictly AFTER the current investment year
+			    VAR CumulativeTable = 
+			        ADDCOLUMNS(
+			            YearHorizon,
+			            "CurrentYearFCF", 
+			                IF('dCalendar'[Year] <= 2025, [Dynamic_Free_Cash_Flow], [Master_Discounted_FCF]),
+			            "ForwardCumulativeFCF",
+			                VAR LoopYear = 'dCalendar'[Year]
+			                RETURN
+			                    SUMX(
+			                        FILTER(YearHorizon, 'dCalendar'[Year] <= LoopYear),
+			                        IF('dCalendar'[Year] <= 2025, [Dynamic_Free_Cash_Flow], [Master_Discounted_FCF])
+			                    )
+			        )
+			
+			    -- 3. Pinpoint the explicit breakeven milestone year
+			    VAR BreakEvenYear = 
+			        MINX(
+			            FILTER(CumulativeTable, [ForwardCumulativeFCF] >= TargetInvestment),
+			            'dCalendar'[Year]
+			        )
+			
+			    -- 4. Calculate the precise decimal fraction components
+			    VAR PriorYear = BreakEvenYear - 1
+			    VAR PriorCumulativeFCF = 
+			        COALESCE(
+			            MAXX(FILTER(CumulativeTable, 'dCalendar'[Year] = PriorYear), [ForwardCumulativeFCF]),
+			            0
+			        )
+			    VAR TargetYearNetCash = 
+			        MAXX(FILTER(CumulativeTable, 'dCalendar'[Year] = BreakEvenYear), [CurrentYearFCF])
+			
+			    VAR RemainingAmountNeeded = TargetInvestment - PriorCumulativeFCF
+			    VAR Fraction = DIVIDE(RemainingAmountNeeded, TargetYearNetCash, 0)
+			    VAR WholeYears = BreakEvenYear - CurrentYear
+			
+			    RETURN
+			        IF(
+			            ISBLANK(BreakEvenYear),
+			            BLANK(), -- Investment does not clear within the 2030 forecast window
+			            WholeYears + Fraction
+			        ),
+			    BLANK()
+			)
+			
+			```
+		lineageTag: 2c2e2c3c-0fd2-42e0-a925-9f993c07e270
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Cumulative_Discounted_FCF =
+			
+			VAR CurrentYear = MAX('dCalendar'[Year])
+			VAR YearsToAdd =
+			    FILTER(
+			        SUMMARIZE(ALL('dCalendar'), 'dCalendar'[Year]),
+			        'dCalendar'[Year] >= 2021
+			            && 'dCalendar'[Year] <= CurrentYear
+			    )
+			RETURN
+			SUMX(
+			    YearsToAdd,
+			    VAR Y = 'dCalendar'[Year]
+			    VAR ForecastDCF =
+			        CALCULATE(
+			            [Master_Discounted_FCF],
+			            REMOVEFILTERS('dCalendar'),
+			            REMOVEFILTERS('fIncomeStatementForecast'[Year]),
+			            'dCalendar'[Year] = Y
+			        )
+			    VAR HistoricalFCF =
+			        CALCULATE(
+			            SUM('fCashFlow'[Amount]),
+			            'fCashFlow'[AccountHead] = "freeCashFlow",
+			            REMOVEFILTERS('dCalendar'),
+			            'dCalendar'[Year] = Y
+			        )
+			    RETURN
+			        IF(Y <= 2025, HistoricalFCF, ForecastDCF)
+			)
+		formatString: #,0
+		lineageTag: f421fdcf-d70f-4e5e-b2ae-9c2b75d39b54
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure Cumulative_CapEx =
+			
+			VAR CurrentYear = MAX('dCalendar'[Year])
+			
+			VAR YearsToAdd =
+			    FILTER(
+			        SUMMARIZE(
+			            ALL('dCalendar'),
+			            'dCalendar'[Year]
+			        ),
+			        'dCalendar'[Year] >= 2021
+			            && 'dCalendar'[Year] <= CurrentYear
+			    )
+			
+			VAR GlobalHistNI =
+			    CALCULATE(
+			        SUM('fIncomeStatementForecast'[Amount]),
+			        'fIncomeStatementForecast'[IsForecast] = 0,
+			        'fIncomeStatementForecast'[AccountHead] = "Net Income",
+			        REMOVEFILTERS()
+			    )
+			
+			VAR GlobalHistCapEx =
+			    CALCULATE(
+			        ABS(SUM('fCashFlow'[Amount])),
+			        'fCashFlow'[AccountHead] = "capitalExpenditure",
+			        REMOVEFILTERS()
+			    )
+			
+			VAR CapExFactor = DIVIDE(GlobalHistCapEx, GlobalHistNI, 0)
+			
+			RETURN
+			SUMX(
+			    YearsToAdd,
+			    VAR Y = 'dCalendar'[Year]
+			    VAR ActualCapEx =
+			        CALCULATE(
+			            ABS(SUM('fCashFlow'[Amount])),
+			            REMOVEFILTERS('dCalendar'),
+			            'dCalendar'[Year] = Y,
+			            'fCashFlow'[AccountHead] = "capitalExpenditure"
+			        )
+			    VAR ForecastCapEx =
+			        CALCULATE(
+			            SUM('fIncomeStatementForecast'[Amount]),
+			            REMOVEFILTERS('dCalendar'),
+			            REMOVEFILTERS('fIncomeStatementForecast'[Year]),
+			            'dCalendar'[Year] = Y,
+			            'fIncomeStatementForecast'[IsForecast] = 1,
+			            'fIncomeStatementForecast'[AccountHead] = "Net Income"
+			        ) * CapExFactor
+			    RETURN
+			        IF(Y <= 2025, ActualCapEx, ForecastCapEx)
+			)
+		formatString: #,0
+		lineageTag: 14b85e0f-1894-475e-825f-57382ea936a3
+
+	measure Net_Cumulative_Balance =
+			
+			[Cumulative_Discounted_FCF] - [Cumulative_CapEx]
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 0163b13a-dad3-4161-be7f-a33e3ba6ace4
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Dynamic_Payback_Year_KPI = ```
+			
+			-- 1. Identify the specific matrix row year and its CapEx hurdle
+			VAR CurrentYear = MAX('dCalendar'[Year])
+			VAR TargetInvestment = [Dynamic_Annual_CapEx]
+			
+			RETURN
+			IF(
+			    TargetInvestment > 0,
+			    -- 2. Build a timeline that only looks FORWARD from the current row year
+			    VAR ForwardHorizon = 
+			        FILTER(
+			            ALL('dCalendar'[Year]), 
+			            'dCalendar'[Year] >= CurrentYear && 'dCalendar'[Year] <= 2030
+			        )
+			
+			    -- 3. Calculate running cash flows starting strictly from the investment year
+			    VAR BreakEvenYear =
+			        MINX(
+			            FILTER(
+			                ForwardHorizon,
+			                VAR LoopYear = 'dCalendar'[Year]
+			                VAR ForwardCumulativeFCF =
+			                    SUMX(
+			                        FILTER(ForwardHorizon, 'dCalendar'[Year] <= LoopYear),
+			                        IF('dCalendar'[Year] <= 2025, [Dynamic_Free_Cash_Flow], [Master_Discounted_FCF])
+			                    )
+			                RETURN
+			                    ForwardCumulativeFCF >= TargetInvestment
+			            ),
+			            'dCalendar'[Year]
+			        )
+			
+			    RETURN
+			        BreakEvenYear,
+			    BLANK()
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c6359f9a-6bd7-43b5-897a-224fcd57714c
+
+	measure Project_ROI_Overall = ```
+			
+			VAR HorizonYears = 
+			    CALCULATETABLE(
+			        VALUES('dCalendar'[Year]),
+			        'dCalendar'[Year] >= 2021 && 'dCalendar'[Year] <= 2030,
+			        REMOVEFILTERS()
+			    )
+			
+			-- 1. Combine historical actual cash with future discounted cash flows
+			VAR TotalMixedInflows = 
+			    SUMX(
+			        HorizonYears,
+			        VAR LoopYear = 'dCalendar'[Year]
+			        RETURN
+			            IF(
+			                LoopYear <= 2025,
+			                -- 2021-2025: Raw Historical Free Cash Flow
+			                CALCULATE(
+			                    [Dynamic_Free_Cash_Flow],
+			                    'dCalendar'[Year] = LoopYear,
+			                    REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'), REMOVEFILTERS('dScenario'), REMOVEFILTERS('dCalendar')
+			                ),
+			                -- 2026-2030: Future Discounted Present Value Flows
+			                CALCULATE(
+			                    [Master_Discounted_FCF],
+			                    'dCalendar'[Year] = LoopYear,
+			                    REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'), REMOVEFILTERS('dScenario'), REMOVEFILTERS('dCalendar')
+			                )
+			            )
+			    )
+			
+			-- 2. Sum up your raw annual CapEx requirements across the entire 10-year window
+			VAR TotalOutflows = 
+			    SUMX(
+			        HorizonYears,
+			        VAR LoopYear = 'dCalendar'[Year]
+			        RETURN
+			            CALCULATE(
+			                [Dynamic_Annual_CapEx],
+			                'dCalendar'[Year] = LoopYear,
+			                REMOVEFILTERS('dAccount'), REMOVEFILTERS('dValuationMetrics'), REMOVEFILTERS('dScenario'), REMOVEFILTERS('dCalendar')
+			            )
+			    )
+			
+			-- 3. Execute the Discounted ROI formula
+			RETURN 
+			    IF(
+			        TotalOutflows > 0,
+			        DIVIDE(TotalMixedInflows - TotalOutflows, TotalOutflows, 0),
+			        BLANK()
+			    )
+			
+			```
+		formatString: #,0.00%;-#,0.00%;#,0.00%
+		lineageTag: b8b1cced-f500-4c8f-b7ff-a0de9cbadeec
+
+	measure Dynamic_Payback_Period_Cumulative = ```
+			
+			VAR CurrentYearRow = COALESCE(SELECTEDVALUE('dCalendar'[Year]), SELECTEDVALUE('fIncomeStatementForecast'[Year]))
+			
+			RETURN
+			IF(
+			    NOT(ISBLANK(CurrentYearRow)),
+			    -- 1. Grab the cumulative CapEx target up to the active visual row year
+			    VAR CumulativeTargetInvestment = [Cumulative_CapEx]
+			    
+			    -- 2. Generate a clean list of base timeline years
+			    VAR YearHorizon = 
+			        FILTER(
+			            ALL('dCalendar'[Year]), 
+			            'dCalendar'[Year] >= 2021 && 'dCalendar'[Year] <= 2030
+			        )
+			        
+			    -- 3. Calculate the true, isolated sequential accumulation of FCF
+			    VAR CumulativeTable = 
+			        ADDCOLUMNS(
+			            YearHorizon,
+			            "NominalYearFCF", 
+			                VAR Y = 'dCalendar'[Year]
+			                RETURN CALCULATE([Dynamic_Free_Cash_Flow], 'dCalendar'[Year] = Y, REMOVEFILTERS('dCalendar')),
+			            "CumulativeNominalFCF",
+			                VAR LoopYear = 'dCalendar'[Year]
+			                RETURN
+			                    CALCULATE(
+			                        SUMX(
+			                            FILTER(YearHorizon, 'dCalendar'[Year] <= LoopYear),
+			                            VAR InnerYear = 'dCalendar'[Year]
+			                            RETURN CALCULATE([Dynamic_Free_Cash_Flow], 'dCalendar'[Year] = InnerYear, REMOVEFILTERS('dCalendar'))
+			                        ),
+			                        REMOVEFILTERS('dCalendar')
+			                    )
+			        )
+			
+			    -- 4. Locate the exact calendar milestone where cash overtakes the accumulated CapEx
+			    VAR BreakEvenYear = 
+			        MINX(
+			            FILTER(CumulativeTable, [CumulativeNominalFCF] >= CumulativeTargetInvestment),
+			            'dCalendar'[Year]
+			        )
+			
+			    -- 5. Build precise mathematical decimal offsets relative to the 2021 baseline anchor
+			    VAR PriorYear = BreakEvenYear - 1
+			    VAR PriorCumulativeFCF = 
+			        COALESCE(
+			            MAXX(FILTER(CumulativeTable, 'dCalendar'[Year] = PriorYear), [CumulativeNominalFCF]),
+			            0
+			        )
+			    VAR TargetYearNetCash = 
+			        MAXX(FILTER(CumulativeTable, 'dCalendar'[Year] = BreakEvenYear), [NominalYearFCF])
+			
+			    VAR RemainingAmountNeeded = CumulativeTargetInvestment - PriorCumulativeFCF
+			    VAR Fraction = DIVIDE(RemainingAmountNeeded, TargetYearNetCash, 0)
+			    VAR WholeYears = BreakEvenYear - 2021
+			
+			    RETURN
+			        IF(
+			            ISBLANK(BreakEvenYear),
+			            BLANK(),
+			            WholeYears + Fraction
+			        ),
+			    BLANK()
+			)
+			
+			```
+		formatString: #,0.00
+		lineageTag: ce502f78-6918-44ea-94af-b579b0787213
+
+	measure Dynamic_Payback_Period_Annual = ```
+			
+			VAR CurrentYear = 
+			    COALESCE(
+			        SELECTEDVALUE('dCalendar'[Year]), 
+			        SELECTEDVALUE('fIncomeStatementForecast'[Year])
+			    )
+			
+			VAR AnnualInvestment = [Dynamic_Annual_CapEx]
+			VAR AnnualFCF = [Dynamic_Free_Cash_Flow]
+			
+			RETURN
+			IF(
+			    NOT(ISBLANK(CurrentYear)) && AnnualFCF > 0 && AnnualInvestment > 0,
+			    -- Simple single-year operational recovery rate
+			    DIVIDE(AnnualInvestment, AnnualFCF, 0),
+			    BLANK()
+			)
+			
+			```
+		lineageTag: 47422b1f-9cc5-49b5-a5fb-e21e192bd6c2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Budget_Discount_Variance = ```
+			
+			VAR CurrentYear = MAX('dCalendar'[Year])
+			VAR YearIndex = CurrentYear - 2025
+			
+			-- 1. Pull the nominal budget amount from your fInternalBudget fact table
+			VAR NominalBudget = SUM('fInternalBudgets'[BudgetAmount])
+			
+			-- 2. Discount the budget using your macro WACC Engine
+			VAR WACC = [WACC_Engine]
+			VAR DiscountedBudget = 
+			    IF(YearIndex > 0 && NominalBudget > 0, DIVIDE(NominalBudget, POWER(1 + WACC, YearIndex), 0), NominalBudget)
+			
+			-- 3. Discount the budget using the fixed 9% baseline anchor
+			VAR BaselineWACC = 0.09
+			VAR BaselineDiscountedBudget = 
+			    IF(YearIndex > 0 && NominalBudget > 0, DIVIDE(NominalBudget, POWER(1 + BaselineWACC, YearIndex), 0), NominalBudget)
+			
+			RETURN
+			    IF(
+			        NOT(ISBLANK(DiscountedBudget)),
+			        DiscountedBudget - BaselineDiscountedBudget,
+			        BLANK()
+			    )
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: bd1a9d57-51e0-4d3e-91ab-ffc6b07e396a
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Short_Term_Investments = ```
+			
+			    
+			        CALCULATE(
+			            [Unified_Financial_Metric], 
+			            'dAccount'[AccountHead] = "cashAndShortTermInvestments"
+			        ) 
+			        - 
+			        CALCULATE(
+			            [Unified_Financial_Metric], 
+			            'dAccount'[AccountHead] = "cashAndCashEquivalents"
+			        )
+			        
+			    
+			
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: e42afb6e-7a2a-4215-af54-5f00a789e625
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column Column
+		formatString: 0
+		lineageTag: 6a9b5df9-345e-4114-b110-b420c2824d4b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _CoreFinancialMetrics = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 9e81440fc81543c081238659b2ff4c94
+

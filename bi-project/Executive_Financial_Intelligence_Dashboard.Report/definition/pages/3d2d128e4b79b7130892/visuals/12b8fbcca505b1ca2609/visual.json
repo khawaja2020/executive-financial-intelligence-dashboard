@@ -1,0 +1,236 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "12b8fbcca505b1ca2609",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 719.49811794228356,
+    "width": 1280.264282197481,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "keyDriversVisual",
+    "query": {
+      "queryState": {
+        "Details": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dCalendar"
+                    }
+                  },
+                  "Property": "Fiscal Year"
+                }
+              },
+              "queryRef": "dCalendar.Fiscal Year",
+              "nativeQueryRef": "Fiscal Year"
+            }
+          ]
+        },
+        "ExplainBy": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dMacroAssumptions"
+                    }
+                  },
+                  "Property": "CorporateTaxRate"
+                }
+              },
+              "queryRef": "dMacroAssumptions.CorporateTaxRate",
+              "nativeQueryRef": "CorporateTaxRate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dMacroAssumptions"
+                    }
+                  },
+                  "Property": "TerminalGrowthRate"
+                }
+              },
+              "queryRef": "dMacroAssumptions.TerminalGrowthRate",
+              "nativeQueryRef": "TerminalGrowthRate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dMacroAssumptions"
+                    }
+                  },
+                  "Property": "ScenarioYear"
+                }
+              },
+              "queryRef": "dMacroAssumptions.ScenarioYear",
+              "nativeQueryRef": "ScenarioYear"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dMacroAssumptions"
+                    }
+                  },
+                  "Property": "RiskFreeRate"
+                }
+              },
+              "queryRef": "dMacroAssumptions.RiskFreeRate",
+              "nativeQueryRef": "RiskFreeRate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dMacroAssumptions"
+                    }
+                  },
+                  "Property": "MarketRiskPremium"
+                }
+              },
+              "queryRef": "dMacroAssumptions.MarketRiskPremium",
+              "nativeQueryRef": "MarketRiskPremium"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dMacroAssumptions"
+                    }
+                  },
+                  "Property": "IndustryBeta"
+                }
+              },
+              "queryRef": "dMacroAssumptions.IndustryBeta",
+              "nativeQueryRef": "IndustryBeta"
+            }
+          ]
+        },
+        "Target": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_CoreFinancialMetrics"
+                    }
+                  },
+                  "Property": "Budget_Discount_Variance"
+                }
+              },
+              "queryRef": "_CoreFinancialMetrics.Budget_Variance_For_AI",
+              "nativeQueryRef": "Budget_Discount_Variance"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dMacroAssumptions"
+                  }
+                },
+                "Property": "CorporateTaxRate"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "keyDrivers": [
+        {
+          "properties": {
+            "selectedAnalysis": {
+              "expr": {
+                "Literal": {
+                  "Value": "'keyInfluencers'"
+                }
+              }
+            },
+            "targetValue": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Actual'''"
+                }
+              }
+            },
+            "numericTargetSelectedKind": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "keyDriversDrillVisual": [
+        {
+          "properties": {
+            "defaultColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "40D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

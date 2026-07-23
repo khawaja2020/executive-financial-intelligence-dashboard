@@ -1,0 +1,204 @@
+table fIncomeStatementForecast
+	lineageTag: f1e71ecb-ad22-4d4a-8266-6b0fd02f2895
+
+	column acceptedDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b8e64e8d-9362-4999-a97a-44753ba3773c
+		summarizeBy: none
+		sourceColumn: acceptedDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column cik
+		dataType: string
+		lineageTag: f3a3ab1b-ffe4-4cdd-94e0-c4b211811c91
+		summarizeBy: none
+		sourceColumn: cik
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column filingDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: dac40574-5097-4b55-966f-3be03e42e371
+		summarizeBy: none
+		sourceColumn: filingDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fiscalYear
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 09c96511-fe0e-4a47-a281-34bac4923fd3
+		summarizeBy: none
+		sourceColumn: fiscalYear
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column period
+		dataType: string
+		lineageTag: c6cb3082-2654-4df2-8932-bb70f4e89cf9
+		summarizeBy: none
+		sourceColumn: period
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column reportedCurrency
+		dataType: string
+		lineageTag: 6e3faaff-37a5-4e74-bb24-6c748e6f5b9a
+		summarizeBy: none
+		sourceColumn: reportedCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column symbol
+		dataType: string
+		lineageTag: 4bb7037a-1ec3-4af1-bd80-c8d8a1c883c8
+		summarizeBy: none
+		sourceColumn: symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b9519f13-9695-4826-8afa-4d15b8265a6e
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: string
+		lineageTag: 06917ba9-41ab-4bc6-8d23-e7c476b3cd90
+		summarizeBy: none
+		sourceColumn: Year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountHead
+		dataType: string
+		lineageTag: ca92f8d8-4bb6-43b5-9221-6cd1aec8a044
+		summarizeBy: none
+		sourceColumn: AccountHead
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: decimal
+		lineageTag: ff26b3c0-64bd-43e4-8581-790e7f40883e
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsForecast
+		dataType: int64
+		formatString: 0
+		lineageTag: b3b00c88-5cf7-42ed-989c-9e3ed55bcb5a
+		summarizeBy: sum
+		sourceColumn: IsForecast
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Custom
+		dataType: string
+		lineageTag: 57460551-b4f9-40f7-ab00-1ba88c85a7af
+		summarizeBy: none
+		sourceColumn: Custom
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fIncomeStatementForecast = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("E:\Financial Planning in power Bi\result_dataframe.csv"),[Delimiter=",", Columns=41, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Cost of Revenue", Currency.Type}, {"EBITDA", Currency.Type}, {"EPS", Currency.Type}, {"Gross Profit", Currency.Type}, {"Interest Expense", Currency.Type}, {"Net Income", Currency.Type}, {"Operating Income", Currency.Type}, {"Revenue", Currency.Type}, {"Shares Outstanding", Int64.Type}, {"acceptedDate", type datetime}, {"bottomLineNetIncome", Currency.Type}, {"cik", Int64.Type}, {"costAndExpenses", Currency.Type}, {"depreciationAndAmortization", Currency.Type}, {"ebit", Currency.Type}, {"epsDiluted", Currency.Type}, {"filingDate", type date}, {"fiscalYear", type date}, {"generalAndAdministrativeExpenses", Currency.Type}, {"incomeBeforeTax", Currency.Type}, {"incomeTaxExpense", Currency.Type}, {"interestIncome", Currency.Type}, {"netIncomeDeductions", Currency.Type}, {"netIncomeFromContinuingOperations", Currency.Type}, {"netIncomeFromDiscontinuedOperations", Currency.Type}, {"netInterestIncome", Currency.Type}, {"nonOperatingIncomeExcludingInterest", Currency.Type}, {"operatingExpenses", Currency.Type}, {"otherAdjustmentsToNetIncome", Currency.Type}, {"otherExpenses", Currency.Type}, {"period", type text}, {"reportedCurrency", type text}, {"researchAndDevelopmentExpenses", Int64.Type}, {"sellingAndMarketingExpenses", Int64.Type}, {"sellingGeneralAndAdministrativeExpenses", Int64.Type}, {"symbol", type text}, {"totalOtherIncomeExpensesNet", Int64.Type}, {"weightedAverageShsOutDil", Int64.Type}, {"Date", type date}, {"Year", Int64.Type}, {"IsForecast", Int64.Type}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type", {"cik", "acceptedDate", "filingDate", "fiscalYear", "period", "reportedCurrency", "symbol", "Date", "Year", "IsForecast"}, "Attribute", "Value"),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Unpivoted Other Columns",{{"Value", Currency.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Attribute", "AccountHead"}, {"Value", "Amount"}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns",{{"Year", Int64.Type}, {"cik", type text}}),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Changed Type2",{{"Year", type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type3", "StandardAccountHead", each if [AccountHead] = "revenue" then "Revenue"
+				else if [AccountHead] = "costOfRevenue" then "Cost of Revenue"
+				else if [AccountHead] = "grossProfit" then "Gross Profit"
+				else if [AccountHead] = "researchAndDevelopmentExpenses" then "researchAndDevelopmentExpenses"
+				else if [AccountHead] = "generalAndAdministrativeExpenses" then "generalAndAdministrativeExpenses"
+				else if [AccountHead] = "sellingAndMarketingExpenses" then "sellingAndMarketingExpenses"
+				else if [AccountHead] = "sellingGeneralAndAdministrativeExpenses" then "sellingGeneralAndAdministrativeExpenses"
+				else if [AccountHead] = "otherExpenses" then "otherExpenses"
+				else if [AccountHead] = "operatingExpenses" then "operatingExpenses"
+				else if [AccountHead] = "costAndExpenses" then "costAndExpenses"
+				else if [AccountHead] = "netInterestIncome" then "netInterestIncome"
+				else if [AccountHead] = "interestIncome" then "interestIncome"
+				else if [AccountHead] = "interestExpense" then "Interest Expense"
+				else if [AccountHead] = "depreciationAndAmortization" then "depreciationAndAmortization"
+				else if [AccountHead] = "ebitda" then "EBITDA"
+				else if [AccountHead] = "ebit" then "ebit"
+				else if [AccountHead] = "nonOperatingIncomeExcludingInterest" then "nonOperatingIncomeExcludingInterest"
+				else if [AccountHead] = "operatingIncome" then "Operating Income"
+				else if [AccountHead] = "totalOtherIncomeExpensesNet" then "totalOtherIncomeExpensesNet"
+				else if [AccountHead] = "incomeBeforeTax" then "incomeBeforeTax"
+				else if [AccountHead] = "incomeTaxExpense" then "incomeTaxExpense"
+				else if [AccountHead] = "netIncomeFromContinuingOperations" then "netIncomeFromContinuingOperations"
+				else if [AccountHead] = "netIncomeFromDiscontinuedOperations" then "netIncomeFromDiscontinuedOperations"
+				else if [AccountHead] = "otherAdjustmentsToNetIncome" then "otherAdjustmentsToNetIncome"
+				else if [AccountHead] = "netIncome" then "Net Income"
+				else if [AccountHead] = "netIncomeDeductions" then "netIncomeDeductions"
+				else if [AccountHead] = "bottomLineNetIncome" then "bottomLineNetIncome"
+				else if [AccountHead] = "eps" then "EPS"
+				else if [AccountHead] = "epsDiluted" then "epsDiluted"
+				else if [AccountHead] = "weightedAverageShsOut" then "weightedAverageShsOut"
+				else if [AccountHead] = "weightedAverageShsOutDil" then "weightedAverageShsOutDil"
+				else [AccountHead]),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Custom",{"StandardAccountHead"}),
+				    #"Changed Type4" = Table.TransformColumnTypes(#"Removed Columns",{{"acceptedDate", type date}}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Changed Type4", "Custom", each if [IsForecast] = 0 then "Actual" else if [IsForecast] = 1 then "Forecast" else null)
+				in
+				    #"Added Conditional Column"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

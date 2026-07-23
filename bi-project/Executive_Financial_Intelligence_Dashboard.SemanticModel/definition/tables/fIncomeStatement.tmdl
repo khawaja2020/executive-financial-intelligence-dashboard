@@ -1,0 +1,144 @@
+table fIncomeStatement
+	excludeFromModelRefresh
+	lineageTag: b7e8e35d-b21d-48da-9829-919aea63047f
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d0164776-d61b-4777-85be-86db1562a9bb
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column symbol
+		dataType: string
+		lineageTag: e9f642af-fe4b-451f-9d01-691797001b30
+		summarizeBy: none
+		sourceColumn: symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column reportedCurrency
+		dataType: string
+		lineageTag: 7866bbe9-31ea-45be-8947-fd9efe842938
+		summarizeBy: none
+		sourceColumn: reportedCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column cik
+		dataType: string
+		lineageTag: 6c62cb46-de1f-44d1-845c-a0c4fd892efb
+		summarizeBy: none
+		sourceColumn: cik
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column filingDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6ffa9180-3b7b-4150-a7f9-5588f5beacd4
+		summarizeBy: none
+		sourceColumn: filingDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column acceptedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f5786daa-316b-4ccb-8a24-d1792cb5e3c9
+		summarizeBy: none
+		sourceColumn: acceptedDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscalYear
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bcaefb93-2e79-4bec-8f67-85616207cdb6
+		summarizeBy: none
+		sourceColumn: fiscalYear
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column period
+		dataType: string
+		lineageTag: 299711c1-2975-4856-b761-97185cbd7a2f
+		summarizeBy: none
+		sourceColumn: period
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountHead
+		dataType: string
+		lineageTag: 33b04d89-9bb3-44f5-abf9-7a42ff408b91
+		summarizeBy: none
+		sourceColumn: AccountHead
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4ca08e34-ed7b-410c-b4ef-202b96b6e2ca
+		summarizeBy: sum
+		sourceColumn: Value
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition fIncomeStatement = m
+		mode: import
+		source = ```
+				let
+				    Source = Json.Document(Web.Contents(
+				        "https://financialmodelingprep.com/stable/income-statement?symbol=AAPL&apikey=cBB4dV23RalUUI8sTOVSHEvGcE4AOU0x", 
+				        [Timeout=#duration(0, 0, 5, 0)]
+				    )),
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", {"date", "symbol", "reportedCurrency", "cik", "filingDate", "acceptedDate", "fiscalYear", "period", "revenue", "costOfRevenue", "grossProfit", "researchAndDevelopmentExpenses", "generalAndAdministrativeExpenses", "sellingAndMarketingExpenses", "sellingGeneralAndAdministrativeExpenses", "otherExpenses", "operatingExpenses", "costAndExpenses", "netInterestIncome", "interestIncome", "interestExpense", "depreciationAndAmortization", "ebitda", "ebit", "nonOperatingIncomeExcludingInterest", "operatingIncome", "totalOtherIncomeExpensesNet", "incomeBeforeTax", "incomeTaxExpense", "netIncomeFromContinuingOperations", "netIncomeFromDiscontinuedOperations", "otherAdjustmentsToNetIncome", "netIncome", "netIncomeDeductions", "bottomLineNetIncome", "eps", "epsDiluted", "weightedAverageShsOut", "weightedAverageShsOutDil"}, {"date", "symbol", "reportedCurrency", "cik", "filingDate", "acceptedDate", "fiscalYear", "period", "revenue", "costOfRevenue", "grossProfit", "researchAndDevelopmentExpenses", "generalAndAdministrativeExpenses", "sellingAndMarketingExpenses", "sellingGeneralAndAdministrativeExpenses", "otherExpenses", "operatingExpenses", "costAndExpenses", "netInterestIncome", "interestIncome", "interestExpense", "depreciationAndAmortization", "ebitda", "ebit", "nonOperatingIncomeExcludingInterest", "operatingIncome", "totalOtherIncomeExpensesNet", "incomeBeforeTax", "incomeTaxExpense", "netIncomeFromContinuingOperations", "netIncomeFromDiscontinuedOperations", "otherAdjustmentsToNetIncome", "netIncome", "netIncomeDeductions", "bottomLineNetIncome", "eps", "epsDiluted", "weightedAverageShsOut", "weightedAverageShsOutDil"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Column1",{{"date", type date}, {"symbol", type text}, {"reportedCurrency", type text}, {"cik", Int64.Type}, {"filingDate", type date}, {"acceptedDate", type datetime}, {"fiscalYear", type date}, {"period", type text}, {"revenue", Currency.Type}, {"costOfRevenue", Currency.Type}, {"grossProfit", Currency.Type}, {"researchAndDevelopmentExpenses", Currency.Type}, {"generalAndAdministrativeExpenses", Currency.Type}, {"sellingAndMarketingExpenses", Currency.Type}, {"sellingGeneralAndAdministrativeExpenses", Currency.Type}, {"otherExpenses", Currency.Type}, {"operatingExpenses", Currency.Type}, {"costAndExpenses", Currency.Type}, {"netInterestIncome", Currency.Type}, {"interestIncome", Currency.Type}, {"interestExpense", Currency.Type}, {"depreciationAndAmortization", Currency.Type}, {"ebitda", Currency.Type}, {"ebit", Currency.Type}, {"nonOperatingIncomeExcludingInterest", Currency.Type}, {"operatingIncome", Currency.Type}, {"totalOtherIncomeExpensesNet", Currency.Type}, {"incomeBeforeTax", Currency.Type}, {"incomeTaxExpense", Currency.Type}, {"netIncomeFromContinuingOperations", Currency.Type}, {"netIncomeFromDiscontinuedOperations", Currency.Type}, {"otherAdjustmentsToNetIncome", Currency.Type}, {"netIncome", Currency.Type}, {"netIncomeDeductions", Currency.Type}, {"bottomLineNetIncome", Currency.Type}, {"eps", Currency.Type}, {"epsDiluted", Currency.Type}, {"weightedAverageShsOut", Int64.Type}, {"weightedAverageShsOutDil", Int64.Type}}),
+				    #"Unpivoted Only Selected Columns" = Table.Unpivot(#"Changed Type", {"revenue", "costOfRevenue", "grossProfit", "researchAndDevelopmentExpenses", "generalAndAdministrativeExpenses", "sellingAndMarketingExpenses", "sellingGeneralAndAdministrativeExpenses", "otherExpenses", "operatingExpenses", "costAndExpenses", "netInterestIncome", "interestIncome", "interestExpense", "depreciationAndAmortization", "ebitda", "ebit", "nonOperatingIncomeExcludingInterest", "operatingIncome", "totalOtherIncomeExpensesNet", "incomeBeforeTax", "incomeTaxExpense", "netIncomeFromContinuingOperations", "netIncomeFromDiscontinuedOperations", "otherAdjustmentsToNetIncome", "netIncome", "netIncomeDeductions", "bottomLineNetIncome", "eps", "epsDiluted", "weightedAverageShsOut", "weightedAverageShsOutDil"}, "Attribute", "Value"),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Unpivoted Only Selected Columns",{{"Value", Currency.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Attribute", "AccountHead"}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns",{{"cik", type text}, {"date", type datetime}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type2", each [date] >= RangeStart and [date] < RangeEnd),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Filtered Rows",{{"date", type datetime}}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Changed Type3", each [date] >= RangeStart and [date] < RangeEnd),
+				    #"Filtered Rows2" = Table.SelectRows(#"Filtered Rows1", each [date] >= RangeStart and [date] <= RangeEnd)
+				in
+				    #"Filtered Rows2"
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,143 @@
+table dValuationMetrics
+	lineageTag: 93c8fc62-0aab-4c97-b5b8-58bae5287884
+
+	measure Valuation_Summary_Metric = ```
+			
+			VAR SelectedMetric = SELECTEDVALUE('dValuationMetrics'[ValuationMetric])
+			VAR SelectedScenario = SELECTEDVALUE('dScenario'[ScenarioName])
+			
+			-- Use the same fixed LastActualYear for consistency
+			VAR LastActualYear = 2025
+			
+			VAR HorizonYears = 
+			    CALCULATETABLE(
+			        VALUES('dCalendar'[Year]),
+			        'fIncomeStatementForecast'[IsForecast] = 1,
+			        'dCalendar'[Year] > LastActualYear,  -- Only forecast years
+			        REMOVEFILTERS('dAccount')
+			    )
+			
+			VAR PV_Discrete_Cash_Flows = 
+			    SUMX(
+			        HorizonYears,
+			        VAR LoopYear = 'dCalendar'[Year]
+			        RETURN
+			            CALCULATE(
+			                [Master_Discounted_FCF],
+			                'dCalendar'[Year] = LoopYear
+			            )
+			    )
+			
+			VAR PV_Terminal_Value = [Valuation_Terminal_Value_PV]
+			
+			VAR Implied_Enterprise_Value = PV_Discrete_Cash_Flows + PV_Terminal_Value
+			VAR Implied_Share_Price = DIVIDE(Implied_Enterprise_Value, MAX('ShareOutstanding'[NumberOfShares]), 0)
+			
+			RETURN
+			    IF(
+			        SelectedScenario IN {"Optimistic DCF", "Pessimistic DCF"},
+			        SWITCH(
+			            SelectedMetric,
+			            "Present Value of Cash Flows", COALESCE(PV_Discrete_Cash_Flows, 0),
+			            "Terminal Value", COALESCE(PV_Terminal_Value, 0), 
+			            "Implied Enterprise Value", COALESCE(Implied_Enterprise_Value, 0), 
+			            "Implied Share Price", COALESCE(Implied_Share_Price, 0),
+			            BLANK()
+			        ),
+			        BLANK()
+			    )
+			```
+		lineageTag: dd2bf412-507c-47b1-b7c1-7ebcef022e6e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Valuation_Terminal_Value_PV = ```
+			
+			-- FIX: Hardcode or use a reliable method to find last actual year
+			VAR LastActualYear = 2025 
+			
+			VAR MaxForecastYear = 
+			    CALCULATE(
+			        MAX('dCalendar'[Year]), 
+			        'fIncomeStatementForecast'[IsForecast] = 1, 
+			        REMOVEFILTERS()
+			    )
+			VAR HorizonYearsIndex = MaxForecastYear - LastActualYear
+			
+			VAR FinalYearFCF = 
+			    CALCULATE(
+			        [Dynamic_Free_Cash_Flow], 
+			        'dCalendar'[Year] = MaxForecastYear,
+			        REMOVEFILTERS('dCalendar'),
+			        REMOVEFILTERS('dAccount')
+			    )
+			
+			VAR WACC = [WACC_Adjustment Value]
+			VAR SelectedTerminalGrowth = SELECTEDVALUE('dMacroAssumptions'[TerminalGrowthRate], 0.02)
+			
+			VAR CurrentScenario = SELECTEDVALUE('dScenario'[ScenarioName])
+			VAR AdjustedFinalFCF = 
+			    SWITCH(
+			        CurrentScenario,
+			        "Optimistic DCF", FinalYearFCF * 1.15, 
+			        "Pessimistic DCF", FinalYearFCF * 0.85, 
+			        FinalYearFCF
+			    )
+			
+			VAR TerminalValue_Future = 
+			    DIVIDE(
+			        AdjustedFinalFCF * (1 + SelectedTerminalGrowth), 
+			        WACC - SelectedTerminalGrowth, 
+			        0
+			    )
+			
+			RETURN
+			    IF(
+			        WACC > SelectedTerminalGrowth && HorizonYearsIndex > 0,
+			        DIVIDE(TerminalValue_Future, POWER(1 + WACC, HorizonYearsIndex)),
+			        BLANK()
+			    )
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4b5b93e5-5e1c-47a9-8881-2ba99d79cb94
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column ValuationMetric
+		lineageTag: 6272ceed-d4a7-4517-8c8e-11900c992332
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ValuationMetric]
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: c15316e6-ee88-49e5-89f0-46229295bd70
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dValuationMetrics = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE (
+				    "ValuationMetric", STRING, 
+				    "SortOrder", INTEGER,
+				    {
+				        {"Present Value of Cash Flows", 1},
+				        {"Terminal Value", 2},
+				        {"Implied Enterprise Value", 3},
+				        {"Implied Share Price", 4}
+				    }
+				)
+				
+				
+				```
+
+	annotation PBI_Id = 16bf42ce2ed74b749be74c496c219ba6
+

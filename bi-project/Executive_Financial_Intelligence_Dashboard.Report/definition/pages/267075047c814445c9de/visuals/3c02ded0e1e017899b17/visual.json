@@ -1,0 +1,732 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "3c02ded0e1e017899b17",
+  "position": {
+    "x": 10.408652700792528,
+    "y": 0,
+    "z": 0,
+    "height": 719.49811794228356,
+    "width": 1269.8556294966886,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Step 1: Create the Mandatory Parameters",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "To trigger the Incremental Refresh options in Power BI Desktop, you must create two parameters with these exact case-sensitive names:",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Click ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Transform Data",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " to open Power Query.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Click ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Manage Parameters",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " > ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "New Parameter",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Create ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "RangeStart",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ": Set type to ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Date/Time",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " and choose a starting baseline date (e.g., ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "2021-01-01",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ").",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Create ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "RangeEnd",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ": Set type to ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Date/Time",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " and choose an ending placeholder date (e.g., ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "2030-12-31",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "). ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Step 2: Apply the Filter to ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "fIncomeStatementForecast",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Go to your ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "fIncomeStatementForecast",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " table in Power Query.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Select your Date or Year column (Note: If it is an integer Year column, you must temporarily convert it or add a custom Date column like ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "#date([Year], 1, 1)",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " to allow Date/Time filtering).",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Click the column filter drop-down > ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Date/Time Filters",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " > ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Between",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Configure the parameters exactly like this to avoid duplicate data points:",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Is ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "after or equal to",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " → Parameter → ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "RangeStart",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "And is ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "before",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " → Parameter → ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "RangeEnd",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Click ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Close & Apply",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Step 3: Define the Policy in Power BI Desktop",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "In the Model view or Report view, right-click ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "fIncomeStatementForecast",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " in the Data pane and select ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Incremental refresh",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Toggle it ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "On",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Set your parameters (e.g., Archive data starting: ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "5 Years",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ", Incrementally refresh data starting: ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "1 Year",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ").",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "💡 ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": "Enterprise Architecture Disclaimer:",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontSize": "14pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Incremental Refresh and Hybrid Real-Time partitions have been explicitly configured on ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": "fIncomeStatement",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": " using ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": "RangeStart",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": "/",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": "RangeEnd",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  },
+                  {
+                    "value": " parameters to demonstrate large-scale dataset performance optimization. In a production enterprise star schema, this pattern is reserved for high-velocity transactional engines (10M+ rows). For a standalone equity model like AAPL, standard Import Mode is structurally preferred to prevent frozen historical partitions from biasing the fluid arrays feeding the predictive Python regression loops.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontStyle": "italic",
+                      "fontSize": "14pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "40D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

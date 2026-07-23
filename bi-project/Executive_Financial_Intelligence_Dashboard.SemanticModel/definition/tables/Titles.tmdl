@@ -1,0 +1,35 @@
+table Titles
+	lineageTag: d5b0ac7e-df6a-4275-a44e-fd6de556aef2
+
+	measure Dynamic_Title_Executive = ```
+			
+			SELECTEDVALUE('dScenario'[ScenarioName], "Actual") & " Financial Summary for " & 
+			IF(ISFILTERED('dCalendar'[Year]), SELECTEDVALUE('dCalendar'[Year]), "All Years")
+			
+			```
+		lineageTag: c7c8c3fd-053b-4f6e-90e6-cd4a4e561916
+
+	measure DCF_Title = ```
+			
+			"Valuation at " & 
+			FORMAT([WACC_Adjustment Value], "0.00%") & 
+			" WACC | Terminal Growth: " & 
+			FORMAT(SELECTEDVALUE('dMacroAssumptions'[TerminalGrowthRate], 0.020), "0.00%")
+			```
+		lineageTag: cbf47269-febe-47b7-9eeb-9d7634ff8cd5
+
+	column Column
+		formatString: 0
+		lineageTag: 9227bf64-0fc2-482d-b849-8748b1897163
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Titles = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 5b632f98e55343b795736f96bbf19788
+

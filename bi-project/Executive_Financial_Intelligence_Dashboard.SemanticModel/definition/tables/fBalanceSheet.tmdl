@@ -1,0 +1,186 @@
+table fBalanceSheet
+	excludeFromModelRefresh
+	lineageTag: 100767a6-44af-4932-8d1c-24c792251f69
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ee42a1c3-9fb1-4d7c-b005-4d01faab032f
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column symbol
+		dataType: string
+		lineageTag: 74d0048b-a244-4676-8048-eda805d5f2e9
+		summarizeBy: none
+		sourceColumn: symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column reportedCurrency
+		dataType: string
+		lineageTag: 9abf5461-d5dc-41ec-a54a-6eb0473861d9
+		summarizeBy: none
+		sourceColumn: reportedCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column cik
+		dataType: string
+		lineageTag: b2d93023-f328-4c35-8241-c04e06dcf03b
+		summarizeBy: none
+		sourceColumn: cik
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column filingDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6ba21c40-fce7-4d4e-a161-b59fbb0e8055
+		summarizeBy: none
+		sourceColumn: filingDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column acceptedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 993bcfc3-6d7b-4f72-b334-d68615672699
+		summarizeBy: none
+		sourceColumn: acceptedDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscalYear
+		dataType: int64
+		formatString: 0
+		lineageTag: f3d18049-4e31-4ccb-a4d1-2c272a6c5f74
+		summarizeBy: sum
+		sourceColumn: fiscalYear
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column period
+		dataType: string
+		lineageTag: 77db4e39-0252-4b3d-9797-117a75afab4f
+		summarizeBy: none
+		sourceColumn: period
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioName
+		dataType: string
+		lineageTag: e1b51bc0-e0de-43a9-a192-94db0ed370b6
+		summarizeBy: none
+		sourceColumn: ScenarioName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsForecast
+		dataType: int64
+		formatString: 0
+		lineageTag: ae599eda-c15f-4464-8007-aa1955b33b70
+		summarizeBy: sum
+		sourceColumn: IsForecast
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountHead
+		dataType: string
+		lineageTag: 30aed2e2-7c89-46c9-ab29-4fbfff89df95
+		summarizeBy: none
+		sourceColumn: AccountHead
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: f5c14939-ece9-4891-a5ec-835bd7adce4d
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition fBalanceSheet = m
+		mode: import
+		source = ```
+				let
+				    // Changed endpoint path from /stable/ to /api/v3/
+				    Source = Json.Document(Web.Contents(
+				        "https://financialmodelingprep.com/stable/balance-sheet-statement?symbol=AAPL&apikey=cBB4dV23RalUUI8sTOVSHEvGcE4AOU0x", 
+				        [Timeout=#duration(0, 0, 5, 0)]
+				    )),
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    AllColumnNames = List.Distinct(List.Combine(List.Transform(#"Converted to Table"[Column1], Record.FieldNames))),
+				    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", AllColumnNames),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Column1",{
+				        {"date", type date}, {"symbol", type text}, {"reportedCurrency", type text}, {"cik", type text}, 
+				        {"filingDate", type date}, {"acceptedDate", type datetime}, {"fiscalYear", Int64.Type}, {"period", type text}, 
+				        {"cashAndCashEquivalents", Currency.Type}, {"shortTermInvestments", Currency.Type}, {"cashAndShortTermInvestments", Currency.Type}, 
+				        {"netReceivables", Currency.Type}, {"accountsReceivables", Currency.Type}, {"otherReceivables", Currency.Type}, 
+				        {"inventory", Currency.Type}, {"prepaids", Currency.Type}, {"otherCurrentAssets", Currency.Type}, 
+				        {"totalCurrentAssets", Currency.Type}, {"propertyPlantEquipmentNet", Currency.Type}, {"goodwill", Currency.Type}, 
+				        {"intangibleAssets", Currency.Type}, {"goodwillAndIntangibleAssets", Currency.Type}, {"longTermInvestments", Currency.Type}, 
+				        {"taxAssets", Currency.Type}, {"otherNonCurrentAssets", Currency.Type}, {"totalNonCurrentAssets", Currency.Type}, 
+				        {"otherAssets", Currency.Type}, {"totalAssets", Currency.Type}, {"totalPayables", Currency.Type}, 
+				        {"accountPayables", Currency.Type}, {"otherPayables", Currency.Type}, {"accruedExpenses", Currency.Type}, 
+				        {"shortTermDebt", Currency.Type}, {"capitalLeaseObligationsCurrent", Currency.Type}, {"taxPayables", Currency.Type}, 
+				        {"deferredRevenue", Currency.Type}, {"otherCurrentLiabilities", Currency.Type}, {"totalCurrentLiabilities", Currency.Type}, 
+				        {"longTermDebt", Currency.Type}, {"capitalLeaseObligationsNonCurrent", Currency.Type}, {"deferredRevenueNonCurrent", Currency.Type}, 
+				        {"deferredTaxLiabilitiesNonCurrent", Currency.Type}, {"otherNonCurrentLiabilities", Currency.Type}, 
+				        {"totalNonCurrentLiabilities", Currency.Type}, {"otherLiabilities", Currency.Type}, {"capitalLeaseObligations", Currency.Type}, 
+				        {"totalLiabilities", Currency.Type}, {"treasuryStock", Currency.Type}, {"preferredStock", Currency.Type}, 
+				        {"commonStock", Currency.Type}, {"retainedEarnings", Currency.Type}, {"additionalPaidInCapital", Currency.Type}, 
+				        {"accumulatedOtherComprehensiveIncomeLoss", Currency.Type}, {"otherTotalStockholdersEquity", Currency.Type}, 
+				        {"totalStockholdersEquity", Currency.Type}, {"totalEquity", Currency.Type}, {"minorityInterest", Currency.Type}, 
+				        {"totalLiabilitiesAndTotalEquity", Currency.Type}, {"totalInvestments", Currency.Type}, {"totalDebt", Currency.Type}, 
+				        {"netDebt", Currency.Type}
+				    }),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "ScenarioName", each "Actual"),
+				    #"Added Conditional Column" = Table.AddColumn(#"Added Custom", "IsForecast", each if [ScenarioName] = "Actual" then 0 else if [ScenarioName] = "Forecast" then 1 else null),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Added Conditional Column", {"period", "fiscalYear", "acceptedDate", "filingDate", "cik", "reportedCurrency", "symbol", "date", "ScenarioName", "IsForecast"}, "Attribute", "Value"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Value", "Amount"}, {"Attribute", "AccountHead"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"IsForecast", Int64.Type}})
+				in
+				    #"Changed Type1"
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

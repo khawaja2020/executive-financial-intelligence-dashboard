@@ -1,0 +1,44 @@
+relationship 6623693f-ccd5-803c-209b-3b75519bc718
+	fromColumn: fCashFlow.date
+	toColumn: dCalendar.Date
+
+relationship 628e13d2-f09b-e380-cd55-812b16aa48ca
+	fromColumn: fBalanceSheet.date
+	toColumn: dCalendar.Date
+
+relationship bc1d20b0-5206-e285-9a0e-43bda21d3f6a
+	fromColumn: fIncomeStatementForecast.Date
+	toColumn: dCalendar.Date
+
+relationship d5cb559b-9cd6-208c-5609-b99f04711665
+	fromColumn: fIncomeStatementForecast.AccountHead
+	toColumn: dAccount.AccountHead
+
+relationship 5fa9aef0-2531-559a-e6a3-4b8c85997bce
+	fromColumn: fBalanceSheet.AccountHead
+	toColumn: dAccount.AccountHead
+
+relationship 169bbf51-3a21-6049-23a9-ba78736bfeca
+	fromColumn: fCashFlow.AccountHead
+	toColumn: dAccount.AccountHead
+
+relationship AutoDetected_c91c120f-9a98-4cce-ae1c-b1cc7bb7617d
+	fromColumn: fBalanceSheet.ScenarioName
+	toColumn: dScenario.ScenarioName
+
+relationship AutoDetected_c800e027-3404-497c-aedc-271931399557
+	fromColumn: fCashFlow.ScenarioName
+	toColumn: dScenario.ScenarioName
+
+relationship 63b24bd0-5b6a-c310-e383-991440ea74a3
+	fromColumn: fInternalBudgets.Date
+	toColumn: dCalendar.Date
+
+relationship 83887c4f-7912-56f9-7d0f-b9683c40decc
+	fromColumn: fInternalBudgets.ForecastScenario
+	toColumn: dVersion.VersionName
+
+relationship fa60d8b1-f3a5-3c0a-e244-7e56bc7dd105
+	fromColumn: fIncomeStatementForecast.Custom
+	toColumn: dScenario.ScenarioName
+

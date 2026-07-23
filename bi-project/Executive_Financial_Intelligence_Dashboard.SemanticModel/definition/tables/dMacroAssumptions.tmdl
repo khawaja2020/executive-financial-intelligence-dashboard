@@ -1,0 +1,99 @@
+table dMacroAssumptions
+	lineageTag: b29c5d58-17a8-48bb-86a1-077be23667d2
+
+	column ScenarioYear
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f36fea69-0ffa-4a18-8b84-e4a05dce0e3d
+		summarizeBy: none
+		sourceColumn: ScenarioYear
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column RiskFreeRate
+		dataType: double
+		lineageTag: 572c8688-a0c3-4d01-a010-b2f24cd50c00
+		summarizeBy: none
+		sourceColumn: RiskFreeRate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MarketRiskPremium
+		dataType: double
+		lineageTag: 1e59864c-d210-4c58-b21f-02df0aa8636c
+		summarizeBy: none
+		sourceColumn: MarketRiskPremium
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TerminalGrowthRate
+		dataType: double
+		formatString: 0.000%;-0.000%;0.000%
+		lineageTag: 5036b200-f9e5-42d4-8ae6-59846793ce64
+		summarizeBy: none
+		sourceColumn: TerminalGrowthRate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column CorporateTaxRate
+		dataType: double
+		lineageTag: 399cf5c7-7450-4f3f-aee8-2927138756bf
+		summarizeBy: none
+		sourceColumn: CorporateTaxRate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IndustryBeta
+		dataType: double
+		lineageTag: f348aa04-5fc9-4cbc-87ba-e82c89a4ef0d
+		summarizeBy: none
+		sourceColumn: IndustryBeta
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dMacroAssumptions = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromColumns({Lines.FromBinary(File.Contents("E:\Financial Planning in power Bi\macro_valuation_assumptions.csv"), null, null, 1252)}),
+				    #"Removed Top Rows" = Table.Skip(Source, 1),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Removed Top Rows", "Column1", Splitter.SplitTextByEachDelimiter({",0"}, QuoteStyle.None), {"Column1", "Column2"}),
+				    #"Extracted Text After Delimiter" = Table.TransformColumns(#"Split Column by Delimiter", {{"Column1", each Text.AfterDelimiter(_, """"), type text}}),
+				    #"Split Column by Delimiter1" = Table.SplitColumn(#"Extracted Text After Delimiter", "Column2", Splitter.SplitTextByEachDelimiter({",0"}, QuoteStyle.None), {"Column2", "Column3"}),
+				    #"Split Column by Delimiter2" = Table.SplitColumn(#"Split Column by Delimiter1", "Column3", Splitter.SplitTextByEachDelimiter({",0"}, QuoteStyle.None), {"Column3", "Column4"}),
+				    #"Split Column by Delimiter3" = Table.SplitColumn(#"Split Column by Delimiter2", "Column4", Splitter.SplitTextByEachDelimiter({",0"}, QuoteStyle.None), {"Column4", "Column5"}),
+				    #"Split Column by Delimiter4" = Table.SplitColumn(#"Split Column by Delimiter3", "Column5", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.None), {"Column5", "Column6"}),
+				    #"Extracted Text Before Delimiter" = Table.TransformColumns(#"Split Column by Delimiter4", {{"Column6", each Text.BeforeDelimiter(_, """"), type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Extracted Text Before Delimiter", {{"Column1", "ScenarioYear"}, {"Column2", "RiskFreeRate"}, {"Column3", "MarketRiskPremium"}, {"Column4", "TerminalGrowthRate"}, {"Column5", "CorporateTaxRate"}, {"Column6", "IndustryBeta"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"ScenarioYear", type date}, {"RiskFreeRate", Percentage.Type}, {"MarketRiskPremium", type number}, {"TerminalGrowthRate", Percentage.Type}, {"CorporateTaxRate", Percentage.Type}, {"IndustryBeta", type number}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

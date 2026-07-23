@@ -1,0 +1,95 @@
+table fInternalBudgets
+	lineageTag: 2ebb61e8-3591-4f8a-bc5c-8a386486ad39
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 029b3ade-c390-4e4e-bd2d-ebcb5b16433a
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Department
+		dataType: string
+		lineageTag: 7ba88e2b-6a87-443b-8faa-b8ec6ca7f193
+		summarizeBy: none
+		sourceColumn: Department
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostCenter
+		dataType: string
+		lineageTag: f47cdc46-ddcb-425c-88ab-090e42b11c9a
+		summarizeBy: none
+		sourceColumn: CostCenter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExpenseCategory
+		dataType: string
+		lineageTag: 12cdf4e8-8547-48b7-a65e-37aa506864cf
+		summarizeBy: none
+		sourceColumn: ExpenseCategory
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BudgetAmount
+		dataType: decimal
+		formatString: 0
+		lineageTag: 7729711a-b3c4-4f96-8690-2aeef071a76e
+		summarizeBy: sum
+		sourceColumn: BudgetAmount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ForecastScenario
+		dataType: string
+		lineageTag: dd8162d1-6684-4c2b-8d7e-0ba87c5f10a4
+		summarizeBy: none
+		sourceColumn: ForecastScenario
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fInternalBudgets = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromColumns({Lines.FromBinary(File.Contents("E:\Financial Planning in power Bi\internal_corporate_budgets.csv"), null, null, 1252)}),
+				    #"Removed Top Rows" = Table.Skip(Source, 1),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Removed Top Rows", "Column1", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.None), {"Column1", "Column2"}),
+				    #"Extracted Text After Delimiter" = Table.TransformColumns(#"Split Column by Delimiter", {{"Column1", each Text.AfterDelimiter(_, """"), type text}}),
+				    #"Split Column by Delimiter1" = Table.SplitColumn(#"Extracted Text After Delimiter", "Column2", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.None), {"Column2", "Column3"}),
+				    #"Split Column by Delimiter2" = Table.SplitColumn(#"Split Column by Delimiter1", "Column3", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.None), {"Column3", "Column4"}),
+				    #"Split Column by Delimiter3" = Table.SplitColumn(#"Split Column by Delimiter2", "Column4", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.None), {"Column4", "Column5"}),
+				    #"Split Column by Delimiter4" = Table.SplitColumn(#"Split Column by Delimiter3", "Column5", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.None), {"Column5", "Column6"}),
+				    #"Extracted Text Before Delimiter" = Table.TransformColumns(#"Split Column by Delimiter4", {{"Column6", each Text.BeforeDelimiter(_, """"), type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Extracted Text Before Delimiter", {{"Column1", "Date"}, {"Column2", "Department"}, {"Column3", "CostCenter"}, {"Column4", "ExpenseCategory"}, {"Column5", "BudgetAmount"}, {"Column6", "ForecastScenario"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Date", type date}, {"Department", type text}, {"CostCenter", type text}, {"ExpenseCategory", type text}, {"BudgetAmount", Currency.Type}, {"ForecastScenario", type text}}),
+				    #"Inserted Year" = Table.AddColumn(#"Changed Type", "Year", each Date.Year([Date]), Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Inserted Year",{"Year", "Date", "Department", "CostCenter", "ExpenseCategory", "BudgetAmount", "ForecastScenario"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Reordered Columns",{{"Year", type date}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type1",{"Year"})
+				in
+				    #"Removed Columns"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

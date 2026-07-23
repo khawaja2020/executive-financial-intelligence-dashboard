@@ -1,0 +1,7 @@
+role 'Budget Viewer'
+	modelPermission: read
+
+	tablePermission dScenario = [ScenarioName] == "Budget" || [ScenarioName] == "Actual"
+
+	annotation PBI_Id = b681588b99b948f286c7e793b057abaa
+

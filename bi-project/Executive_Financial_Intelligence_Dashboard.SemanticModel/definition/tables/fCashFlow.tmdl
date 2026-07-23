@@ -1,0 +1,164 @@
+table fCashFlow
+	excludeFromModelRefresh
+	lineageTag: 881b43de-a7ec-4243-a13e-2861649396dc
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 17446a13-fb71-4227-980e-3c45384522e2
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column symbol
+		dataType: string
+		lineageTag: ebe9be9f-a7a2-4a92-bdae-13c14a9d9bc5
+		summarizeBy: none
+		sourceColumn: symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column reportedCurrency
+		dataType: string
+		lineageTag: 79c2dff0-ba1e-47ae-a864-b71c5451555d
+		summarizeBy: none
+		sourceColumn: reportedCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column cik
+		dataType: int64
+		formatString: 0
+		lineageTag: 8ec53f77-db41-45e6-ba8f-a41e63588ca1
+		summarizeBy: sum
+		sourceColumn: cik
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column filingDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7fe97f55-ef0c-44da-9cea-fa0dc05fe757
+		summarizeBy: none
+		sourceColumn: filingDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column acceptedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7e3b741b-5e5d-447f-8c42-516df514203f
+		summarizeBy: none
+		sourceColumn: acceptedDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscalYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 968e5fd9-502a-4d67-8417-c4e5b8ec0845
+		summarizeBy: sum
+		sourceColumn: fiscalYear
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column period
+		dataType: string
+		lineageTag: b77ab09d-e72a-4db9-8784-7c0edf7c42bb
+		summarizeBy: none
+		sourceColumn: period
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScenarioName
+		dataType: string
+		lineageTag: 32e51ac2-9ba3-4a03-9245-8bdee4840475
+		summarizeBy: none
+		sourceColumn: ScenarioName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsForecast
+		dataType: int64
+		formatString: 0
+		lineageTag: 0212a5ed-e7ad-4e9f-891d-4f23fdc60a63
+		summarizeBy: sum
+		sourceColumn: IsForecast
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountHead
+		dataType: string
+		lineageTag: e3e5c33d-967f-4c42-a862-8c5a825466ae
+		summarizeBy: none
+		sourceColumn: AccountHead
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 6ccdd0d3-7b8d-45c0-bfb7-52d3cc31c1e8
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition fCashFlow = m
+		mode: import
+		source = ```
+				let
+				        Source = Json.Document(Web.Contents(
+				        "https://financialmodelingprep.com/stable/cash-flow-statement?symbol=AAPL&apikey=cBB4dV23RalUUI8sTOVSHEvGcE4AOU0x", 
+				        [Timeout=#duration(0, 0, 5, 0)]
+				    )),
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", {"date", "symbol", "reportedCurrency", "cik", "filingDate", "acceptedDate", "fiscalYear", "period", "netIncome", "depreciationAndAmortization", "deferredIncomeTax", "stockBasedCompensation", "changeInWorkingCapital", "accountsReceivables", "inventory", "accountsPayables", "otherWorkingCapital", "otherNonCashItems", "netCashProvidedByOperatingActivities", "investmentsInPropertyPlantAndEquipment", "acquisitionsNet", "purchasesOfInvestments", "salesMaturitiesOfInvestments", "otherInvestingActivities", "netCashProvidedByInvestingActivities", "netDebtIssuance", "longTermNetDebtIssuance", "shortTermNetDebtIssuance", "netStockIssuance", "netCommonStockIssuance", "commonStockIssuance", "commonStockRepurchased", "netPreferredStockIssuance", "netDividendsPaid", "commonDividendsPaid", "preferredDividendsPaid", "otherFinancingActivities", "netCashProvidedByFinancingActivities", "effectOfForexChangesOnCash", "netChangeInCash", "cashAtEndOfPeriod", "cashAtBeginningOfPeriod", "operatingCashFlow", "capitalExpenditure", "freeCashFlow", "incomeTaxesPaid", "interestPaid"}, {"date", "symbol", "reportedCurrency", "cik", "filingDate", "acceptedDate", "fiscalYear", "period", "netIncome", "depreciationAndAmortization", "deferredIncomeTax", "stockBasedCompensation", "changeInWorkingCapital", "accountsReceivables", "inventory", "accountsPayables", "otherWorkingCapital", "otherNonCashItems", "netCashProvidedByOperatingActivities", "investmentsInPropertyPlantAndEquipment", "acquisitionsNet", "purchasesOfInvestments", "salesMaturitiesOfInvestments", "otherInvestingActivities", "netCashProvidedByInvestingActivities", "netDebtIssuance", "longTermNetDebtIssuance", "shortTermNetDebtIssuance", "netStockIssuance", "netCommonStockIssuance", "commonStockIssuance", "commonStockRepurchased", "netPreferredStockIssuance", "netDividendsPaid", "commonDividendsPaid", "preferredDividendsPaid", "otherFinancingActivities", "netCashProvidedByFinancingActivities", "effectOfForexChangesOnCash", "netChangeInCash", "cashAtEndOfPeriod", "cashAtBeginningOfPeriod", "operatingCashFlow", "capitalExpenditure", "freeCashFlow", "incomeTaxesPaid", "interestPaid"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Column1",{{"date", type date}, {"symbol", type text}, {"reportedCurrency", type text}, {"cik", Int64.Type}, {"filingDate", type date}, {"acceptedDate", type datetime}, {"fiscalYear", Int64.Type}, {"period", type text}, {"netIncome", Int64.Type}, {"depreciationAndAmortization", Currency.Type}, {"deferredIncomeTax", Currency.Type}, {"stockBasedCompensation", Currency.Type}, {"changeInWorkingCapital", Currency.Type}, {"accountsReceivables", Currency.Type}, {"inventory", Currency.Type}, {"accountsPayables", Currency.Type}, {"otherWorkingCapital", Currency.Type}, {"otherNonCashItems", Currency.Type}, {"netCashProvidedByOperatingActivities", Currency.Type}, {"investmentsInPropertyPlantAndEquipment", Currency.Type}, {"acquisitionsNet", Currency.Type}, {"purchasesOfInvestments", Currency.Type}, {"salesMaturitiesOfInvestments", Currency.Type}, {"otherInvestingActivities", Currency.Type}, {"netCashProvidedByInvestingActivities", Currency.Type}, {"netDebtIssuance", Currency.Type}, {"longTermNetDebtIssuance", Currency.Type}, {"shortTermNetDebtIssuance", Currency.Type}, {"netStockIssuance", Currency.Type}, {"netCommonStockIssuance", Currency.Type}, {"commonStockIssuance", Currency.Type}, {"commonStockRepurchased", Currency.Type}, {"netPreferredStockIssuance", Currency.Type}, {"netDividendsPaid", Currency.Type}, {"commonDividendsPaid", Currency.Type}, {"preferredDividendsPaid", Currency.Type}, {"otherFinancingActivities", Currency.Type}, {"netCashProvidedByFinancingActivities", Currency.Type}, {"effectOfForexChangesOnCash", Currency.Type}, {"netChangeInCash", Currency.Type}, {"cashAtEndOfPeriod", Currency.Type}, {"cashAtBeginningOfPeriod", Currency.Type}, {"operatingCashFlow", Currency.Type}, {"capitalExpenditure", Currency.Type}, {"freeCashFlow", Currency.Type}, {"incomeTaxesPaid", Currency.Type}, {"interestPaid", Currency.Type}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "ScenarioName", each "Actual"),
+				    #"Added Conditional Column" = Table.AddColumn(#"Added Custom", "Custom", each if [ScenarioName] = "Actual" then 0 else if [ScenarioName] = "Forecast" then 1 else null),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Conditional Column",{{"netIncome", Currency.Type}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type1", {"Custom", "ScenarioName", "date", "symbol", "reportedCurrency", "cik", "filingDate", "acceptedDate", "fiscalYear", "period"}, "Attribute", "Value"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Custom", "IsForecast"}, {"Value", "Amount"}, {"Attribute", "AccountHead"}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns",{{"IsForecast", Int64.Type}})
+				in
+				    #"Changed Type2"
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

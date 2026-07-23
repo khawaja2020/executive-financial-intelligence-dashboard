@@ -1,0 +1,195 @@
+table dCalendar
+	lineageTag: a74aa84d-aeb6-4b04-8cfc-c8eb91e82c7f
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: def1a488-c21c-4fea-9772-db82293fa138
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 497c1f96-083a-4528-a76a-73364ffbfe1d
+		summarizeBy: none
+		sourceColumn: Year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9642c5ac-c690-42dc-bb8f-95d09a323d6e
+		summarizeBy: none
+		sourceColumn: Month Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 0da2144f-af02-48a7-91cb-4e0b9a95b9f6
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: 'Fiscal Month Number'
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3dbb5202-ec91-4b7c-b3b9-6bd3a0d28c3c
+		summarizeBy: none
+		sourceColumn: Week Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Fiscal Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: f4da076f-163d-4769-b555-09f8d6d5ca54
+		summarizeBy: none
+		sourceColumn: Fiscal Month Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Fiscal Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 706607d2-0187-4ac6-92e4-1e52ac95c412
+		summarizeBy: none
+		sourceColumn: Fiscal Year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Fiscal Quarter Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 38bf9c46-35d1-4f31-8841-662c67ab3add
+		summarizeBy: none
+		sourceColumn: Fiscal Quarter Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Fiscal Quarter'
+		dataType: string
+		lineageTag: 6d43a9e8-f90b-4cde-8d9b-b7b57fd5a5be
+		summarizeBy: none
+		sourceColumn: Fiscal Quarter
+		sortByColumn: 'Fiscal Quarter Number'
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fiscal Week Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8cef6876-ccea-4709-bfd9-72061b611bba
+		summarizeBy: none
+		sourceColumn: Fiscal Week Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Fiscal Year Quarter'
+		dataType: string
+		lineageTag: 2dcccfd3-d9e9-4bdf-bf44-92a9211a7154
+		summarizeBy: none
+		sourceColumn: Fiscal Year Quarter
+		sortByColumn: 'Fiscal Quarter'
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fiscal Year Month'
+		dataType: string
+		lineageTag: cea445ff-cf30-4ad1-a8bc-702402f33884
+		summarizeBy: none
+		sourceColumn: Fiscal Year Month
+		sortByColumn: 'Fiscal Month Number'
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dCalendar = m
+		mode: import
+		source = ```
+				let
+				    StartDate = #date(2020, 1, 1),
+				    EndDate = #date(2030, 12, 31),
+				    NumberOfDays = Duration.Days(EndDate - StartDate) + 1,
+				    DatesList = List.Dates(StartDate, NumberOfDays, #duration(1, 0, 0, 0)),
+				    TableFromList = Table.FromList(DatesList, Splitter.SplitByNothing(), {"Date"}, null, ExtraValues.Error),
+				    ChangedType = Table.TransformColumnTypes(TableFromList,{{"Date", type date}}),
+				    
+				    // 1. Standard Calendar Metrics (Keep as numeric/date fields first)
+				    AddYear = Table.AddColumn(ChangedType, "Year", each Date.Year([Date]), Int64.Type),
+				    AddMonthNum = Table.AddColumn(AddYear, "Month Number", each Date.Month([Date]), Int64.Type),
+				    AddMonthName = Table.AddColumn(AddMonthNum, "Month Name", each Date.MonthName([Date]), type text),
+				    AddWeekNum = Table.AddColumn(AddMonthName, "Week Number", each Date.WeekOfYear([Date]), Int64.Type),
+				    
+				    // 2. Core Fiscal Metrics (September Year-End means Oct = Month 1, Jan = Month 4, etc.)
+				    AddFiscalMonth = Table.AddColumn(AddWeekNum, "Fiscal Month Number", each if [Month Number] >= 10 then [Month Number] - 9 else [Month Number] + 3, Int64.Type),
+				    AddFiscalYear = Table.AddColumn(AddFiscalMonth, "Fiscal Year", each if [Month Number] >= 10 then [Year] + 1 else [Year], Int64.Type),
+				    
+				    // 3. Fiscal Quarters (Calculated directly from the Fiscal Month Number)
+				    AddFiscalQuarterNum = Table.AddColumn(AddFiscalYear, "Fiscal Quarter Number", each Number.IntegerDivide([Fiscal Month Number] - 1, 3) + 1, Int64.Type),
+				    AddFiscalQuarter = Table.AddColumn(AddFiscalQuarterNum, "Fiscal Quarter", each "FQ" & Text.From([Fiscal Quarter Number]), type text),
+				    
+				    // 4. Fiscal Week Numbers (Calculated by finding the start of the Fiscal Year)
+				    AddFiscalWeekNum = Table.AddColumn(AddFiscalQuarter, "Fiscal Week Number", each 
+				        let 
+				            FiscalYearStart = #date([Fiscal Year] - 1, 10, 1),
+				            DaysSinceStart = Duration.Days([Date] - FiscalYearStart)
+				        in 
+				            Number.IntegerDivide(DaysSinceStart, 7) + 1, 
+				        Int64.Type
+				    ),
+				    
+				    // 5. Combined Fiscal Period Strings
+				    AddFiscalYearQuarter = Table.AddColumn(AddFiscalWeekNum, "Fiscal Year Quarter", each "FY" & Text.From([Fiscal Year]) & "-" & [Fiscal Quarter], type text),
+				    AddFiscalYearMonth = Table.AddColumn(AddFiscalYearQuarter, "Fiscal Year Month", each "FY" & Text.From([Fiscal Year]) & "-" & Text.PadStart(Text.From([Fiscal Month Number]), 2, "0"), type text)
+				in
+				    AddFiscalYearMonth
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

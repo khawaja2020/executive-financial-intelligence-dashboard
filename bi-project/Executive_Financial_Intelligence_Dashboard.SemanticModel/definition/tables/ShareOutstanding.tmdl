@@ -1,0 +1,58 @@
+table ShareOutstanding
+	lineageTag: e1daeecc-1498-4ade-8332-5757d8f2188c
+
+	column SharesOutstanding
+		dataType: string
+		lineageTag: bef47076-c19e-4c61-becf-b623404b6495
+		summarizeBy: none
+		sourceColumn: SharesOutstanding
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column2
+		dataType: string
+		lineageTag: 3e149a25-d06b-499b-bd2a-0ec36b092536
+		summarizeBy: none
+		sourceColumn: Column2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberOfShares
+		dataType: int64
+		formatString: 0.00
+		lineageTag: 96fedde7-d844-43c7-ad35-96a6f309ca8c
+		summarizeBy: sum
+		sourceColumn: NumberOfShares
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ShareOutstanding = m
+		mode: import
+		source = ```
+				let
+				   Source = Web.BrowserContents("https://finviz.com/stock?t=AAPL", [WaitFor=[Timeout=#duration(0, 0, 5, 0)]]),
+				    
+				    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.js-snapshot-table.snapshot-table2.screener_snapshot-table-body.max-xl\:table-fixed.xl\:table-auto:nth-child(5) > * > TR > :nth-child(1)"}, {"Column2", "TABLE.js-snapshot-table.snapshot-table2.screener_snapshot-table-body.max-xl\:table-fixed.xl\:table-auto:nth-child(5) > * > TR > :nth-child(2)"}}, [RowSelector="TABLE.js-snapshot-table.snapshot-table2.screener_snapshot-table-body.max-xl\:table-fixed.xl\:table-auto:nth-child(5) > * > TR"]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Extracted Table From Html",{{"Column1", type text}, {"Column2", type text}}),
+				    #"Transposed Table" = Table.Transpose(#"Changed Type"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Transposed Table",{"Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14"}),
+				    #"Transposed Table1" = Table.Transpose(#"Removed Columns"),
+				    #"Added Conditional Column" = Table.AddColumn(#"Transposed Table1", "Custom", each if [Column2] = "14.69B" then 14690000000 else null),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Conditional Column",{{"Custom", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Column1", "SharesOutstanding"}, {"Custom", "NumberOfShares"}})
+				in
+				    #"Renamed Columns"
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,37 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["fIncomeStatement","fBalanceSheet","fCashFlow","dCalendar","fInternalBudgets","dMacroAssumptions","dVersion","fMarketData","ShareOutstanding","MarketCap","fIncomeStatementForecast","dScenario","RangeStart","RangeEnd"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dCalendar
+ref table fInternalBudgets
+ref table dMacroAssumptions
+ref table dVersion
+ref table _CoreFinancialMetrics
+ref table fBalanceSheet
+ref table fIncomeStatement
+ref table fCashFlow
+ref table fMarketData
+ref table ShareOutstanding
+ref table MarketCap
+ref table fIncomeStatementForecast
+ref table dAccount
+ref table dValuationMetrics
+ref table dScenario
+ref table Titles
+ref table WACC_Adjustment
+ref table Parameter
+
+ref role 'Budget Viewer'
+
+ref cultureInfo en-US
+

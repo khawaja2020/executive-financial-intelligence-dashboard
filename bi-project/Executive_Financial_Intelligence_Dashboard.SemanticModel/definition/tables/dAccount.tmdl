@@ -1,0 +1,168 @@
+table dAccount
+	lineageTag: b2e8e35d-9901-48d3-8acf-7904625aa617
+
+	column AccountHead
+		lineageTag: 3f6b700a-f748-4f43-bfdc-63958edd1be5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [AccountHead]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinancialStatement
+		lineageTag: 6b751827-7ee5-4e71-99e6-577e1f8212cd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FinancialStatement]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryLevel1
+		lineageTag: f8b728cb-cf2f-4497-9b9a-61423cb9eff9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CategoryLevel1]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryLevel2
+		lineageTag: 67b47db4-c759-42a4-bb03-b2888a0f9da5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CategoryLevel2]
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: ab486873-9a83-4c58-b170-615e01364a0b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dAccount = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE (
+				    "AccountHead", STRING, 
+				    "FinancialStatement", STRING,
+				    "CategoryLevel1", STRING, 
+				    "CategoryLevel2", STRING, 
+				    "SortOrder", INTEGER,
+				    {
+				        -- ==========================================
+				        -- INCOME STATEMENT
+				        -- ==========================================
+				        {"Revenue", "Income Statement", "1. Revenue", "Gross Revenue", 1},
+				        {"Cost of Revenue", "Income Statement", "2. Cost of Revenue", "Direct Costs", 2},
+				        {"Gross Profit", "Income Statement", "3. Gross Profit", "Subtotal", 3},
+				        {"researchAndDevelopmentExpenses", "Income Statement", "4. Operating Expenses", "R&D", 4},
+				        {"sellingAndMarketingExpenses", "Income Statement", "4. Operating Expenses", "Sales & Marketing", 5},
+				        {"generalAndAdministrativeExpenses", "Income Statement", "4. Operating Expenses", "G&A", 6},
+				        {"sellingGeneralAndAdministrativeExpenses", "Income Statement", "4. Operating Expenses", "SG&A", 7},
+				        {"depreciationAndAmortization", "Income Statement", "4. Operating Expenses", "D&A", 8},
+				        {"operatingExpenses", "Income Statement", "4. Operating Expenses", "Total OpEx Summary", 9},
+				        {"costAndExpenses", "Income Statement", "4. Operating Expenses", "Total Cost & Exp Summary", 10},
+				        {"Operating Income", "Income Statement", "5. Profitability Metrics", "Operating Profit", 11},
+				        {"EBITDA", "Income Statement", "5. Profitability Metrics", "EBITDA", 12},
+				        {"ebit", "Income Statement", "5. Profitability Metrics", "EBIT", 13},
+				        {"interestIncome", "Income Statement", "6. Non-Operating Items", "Interest Income", 14},
+				        {"Interest Expense", "Income Statement", "6. Non-Operating Items", "Interest Expense", 15},
+				        {"netInterestIncome", "Income Statement", "6. Non-Operating Items", "Net Interest", 16},
+				        {"nonOperatingIncomeExcludingInterest", "Income Statement", "6. Non-Operating Items", "Other Non-Op Income", 17},
+				        {"otherExpenses", "Income Statement", "6. Non-Operating Items", "Other Expenses", 18},
+				        {"totalOtherIncomeExpensesNet", "Income Statement", "6. Non-Operating Items", "Total Other Net", 19},
+				        {"incomeBeforeTax", "Income Statement", "6. Non-Operating Items", "Pre-Tax Income", 20},
+				        {"incomeTaxExpense", "Income Statement", "7. Taxes", "Income Tax Expense", 21},
+				        {"netIncomeFromContinuingOperations", "Income Statement", "8. Net Income", "Continuing Ops", 22},
+				        {"netIncomeFromDiscontinuedOperations", "Income Statement", "8. Net Income", "Discontinued Ops", 23},
+				        {"netIncomeDeductions", "Income Statement", "8. Net Income", "Deductions", 24},
+				        {"otherAdjustmentsToNetIncome", "Income Statement", "8. Net Income", "Adjustments", 25},
+				        {"Net Income", "Income Statement", "8. Net Income", "Net Income Standard", 26},
+				        {"bottomLineNetIncome", "Income Statement", "8. Net Income", "Bottom Line Net Income", 27},
+				        {"EPS", "Income Statement", "9. Per Share Metrics", "Basic EPS", 28},
+				        {"epsDiluted", "Income Statement", "9. Per Share Metrics", "Diluted EPS", 29},
+				        {"Shares Outstanding", "Income Statement", "9. Per Share Metrics", "Basic Shares", 30},
+				        {"weightedAverageShsOutDil", "Income Statement", "9. Per Share Metrics", "Diluted Shares", 31},
+				
+				        -- ==========================================
+				        -- BALANCE SHEET - ASSETS
+				        -- ==========================================
+				        {"cashAndCashEquivalents", "Balance Sheet", "1. Current Assets", "Cash Equivalents", 101},
+				        {"shortTermInvestments", "Balance Sheet", "1. Current Assets", "Short-term Investments", 102},
+				        {"cashAndShortTermInvestments", "Balance Sheet", "1. Current Assets", "Total Cash & ST Investments", 103},
+				        {"accountsReceivables", "Balance Sheet", "1. Current Assets", "Accounts Receivables", 104},
+				        {"otherReceivables", "Balance Sheet", "1. Current Assets", "Other Receivables", 105},
+				        {"netReceivables", "Balance Sheet", "1. Current Assets", "Net Receivables Summary", 106},
+				        {"inventory", "Balance Sheet", "1. Current Assets", "Inventory", 107},
+				        {"prepaids", "Balance Sheet", "1. Current Assets", "Prepaid Expenses", 108},
+				        {"otherCurrentAssets", "Balance Sheet", "1. Current Assets", "Other Current Assets", 109},
+				        {"totalCurrentAssets", "Balance Sheet", "1. Current Assets", "Total Current Assets Summary", 110},
+				        {"propertyPlantEquipmentNet", "Balance Sheet", "2. Non-Current Assets", "Net PPE", 111},
+				        {"goodwill", "Balance Sheet", "2. Non-Current Assets", "Goodwill", 112},
+				        {"intangibleAssets", "Balance Sheet", "2. Non-Current Assets", "Intangible Assets", 113},
+				        {"goodwillAndIntangibleAssets", "Balance Sheet", "2. Non-Current Assets", "Goodwill & Intangibles Summary", 114},
+				        {"longTermInvestments", "Balance Sheet", "2. Non-Current Assets", "Long-term Investments", 115},
+				        {"taxAssets", "Balance Sheet", "2. Non-Current Assets", "Tax Assets", 116},
+				        {"otherNonCurrentAssets", "Balance Sheet", "2. Non-Current Assets", "Other Non-Current Assets", 117},
+				        {"totalNonCurrentAssets", "Balance Sheet", "2. Non-Current Assets", "Total Non-Current Assets Summary", 118},
+				        {"otherAssets", "Balance Sheet", "2. Non-Current Assets", "Other Assets Summary", 119},
+				        {"totalAssets", "Balance Sheet", "3. Total Assets", "Grand Total Assets", 120},
+				
+				        -- ==========================================
+				        -- BALANCE SHEET - LIABILITIES
+				        -- ==========================================
+				        {"accountPayables", "Balance Sheet", "4. Current Liabilities", "Accounts Payables", 131},
+				        {"otherPayables", "Balance Sheet", "4. Current Liabilities", "Other Payables", 132},
+				        {"totalPayables", "Balance Sheet", "4. Current Liabilities", "Total Payables Summary", 133},
+				        {"accruedExpenses", "Balance Sheet", "4. Current Liabilities", "Accrued Expenses", 134},
+				        {"shortTermDebt", "Balance Sheet", "4. Current Liabilities", "Short-term Debt", 135},
+				        {"capitalLeaseObligationsCurrent", "Balance Sheet", "4. Current Liabilities", "Current Capital Leases", 136},
+				        {"taxPayables", "Balance Sheet", "4. Current Liabilities", "Tax Payables", 137},
+				        {"deferredRevenue", "Balance Sheet", "4. Current Liabilities", "Deferred Revenue Current", 138},
+				        {"otherCurrentLiabilities", "Balance Sheet", "4. Current Liabilities", "Other Current Liabilities", 139},
+				        {"totalCurrentLiabilities", "Balance Sheet", "4. Current Liabilities", "Total Current Liabilities Summary", 140},
+				        {"longTermDebt", "Balance Sheet", "5. Non-Current Liabilities", "Long-term Debt", 141},
+				        {"capitalLeaseObligationsNonCurrent", "Balance Sheet", "5. Non-Current Liabilities", "Non-Current Capital Leases", 142},
+				        {"deferredRevenueNonCurrent", "Balance Sheet", "5. Non-Current Liabilities", "Deferred Revenue Non-Current", 143},
+				        {"deferredTaxLiabilitiesNonCurrent", "Balance Sheet", "5. Non-Current Liabilities", "Deferred Tax Liabilities", 144},
+				        {"otherNonCurrentLiabilities", "Balance Sheet", "5. Non-Current Liabilities", "Other Non-Current Liabilities", 145},
+				        {"totalNonCurrentLiabilities", "Balance Sheet", "5. Non-Current Liabilities", "Total Non-Current Liabilities Summary", 146},
+				        {"otherLiabilities", "Balance Sheet", "5. Non-Current Liabilities", "Other Liabilities Summary", 147},
+				        {"capitalLeaseObligations", "Balance Sheet", "5. Non-Current Liabilities", "Total Capital Leases Summary", 148},
+				        {"totalLiabilities", "Balance Sheet", "6. Total Liabilities", "Grand Total Liabilities", 149},
+				
+				        -- ==========================================
+				        -- BALANCE SHEET - EQUITY & SUPPLEMENTAL
+				        -- ==========================================
+				        {"treasuryStock", "Balance Sheet", "7. Stockholders' Equity", "Treasury Stock", 161},
+				        {"preferredStock", "Balance Sheet", "7. Stockholders' Equity", "Preferred Stock", 162},
+				        {"commonStock", "Balance Sheet", "7. Stockholders' Equity", "Common Stock", 163},
+				        {"retainedEarnings", "Balance Sheet", "7. Stockholders' Equity", "Retained Earnings", 164},
+				        {"additionalPaidInCapital", "Balance Sheet", "7. Stockholders' Equity", "Additional Paid-In Capital", 165},
+				        {"accumulatedOtherComprehensiveIncomeLoss", "Balance Sheet", "7. Stockholders' Equity", "AOCI", 166},
+				        {"otherTotalStockholdersEquity", "Balance Sheet", "7. Stockholders' Equity", "Other Equity", 167},
+				        {"totalStockholdersEquity", "Balance Sheet", "7. Stockholders' Equity", "Total Equity Summary", 168},
+				        {"totalEquity", "Balance Sheet", "7. Stockholders' Equity", "Total Equity Alternative Summary", 169},
+				        {"minorityInterest", "Balance Sheet", "7. Stockholders' Equity", "Minority Interest", 170},
+				        {"totalLiabilitiesAndTotalEquity", "Balance Sheet", "8. Total Liabilities & Equity", "Grand Total L&E", 171},
+				        {"totalInvestments", "Balance Sheet", "9. Balance Sheet Supplemental", "Total Investments", 172},
+				        {"totalDebt", "Balance Sheet", "9. Balance Sheet Supplemental", "Total Debt", 173},
+				        {"netDebt", "Balance Sheet", "9. Balance Sheet Supplemental", "Net Debt", 174},
+				
+				        -- ==========================================
+				        -- CASH FLOW STATEMENT (Uniquified Keys)
+				        -- ==========================================
+				        {"netIncome_CF", "Cash Flow", "1. Operating Activities", "Net Income Link", 201},
+				        {"depreciationAndAmortization_CF", "Cash Flow", "1. Operating Activities", "Depreciation & Amortization", 202},
+				        {"deferredIncomeTax", "Cash Flow", "1. Operating Activities", "Deferred Income Tax", 203},
+				        {"stockBasedCompensation", "Cash Flow", "1. Operating Activities", "Stock-Based Compensation", 204},
+				        {"changeInWorkingCapital", "Cash Flow", "1. Operating Activities", "Change in Working Capital", 205},
+				        {"accountsPayables_CF", "Cash Flow", "1. Operating Activities", "AP Changes", 208},{"otherWorkingCapital", "Cash Flow", "1. Operating Activities", "Other Working Capital Changes", 209},{"otherNonCashItems", "Cash Flow", "1. Operating Activities", "Other Non-Cash Items", 210},{"operatingCashFlow", "Cash Flow", "1. Operating Activities", "Operating Cash Flow Summary", 211},{"netCashProvidedByOperatingActivities", "Cash Flow", "1. Operating Activities", "Net Cash Operating Summary", 212},{"investmentsInPropertyPlantAndEquipment", "Cash Flow", "2. Investing Activities", "Capital Expenditures (PPE)", 221},{"capitalExpenditure", "Cash Flow", "2. Investing Activities", "Capital Expenditures Summary", 222},{"acquisitionsNet", "Cash Flow", "2. Investing Activities", "Net Acquisitions", 223},{"purchasesOfInvestments", "Cash Flow", "2. Investing Activities", "Investment Purchases", 224},{"salesMaturitiesOfInvestments", "Cash Flow", "2. Investing Activities", "Investment Sales/Maturities", 225},{"otherInvestingActivities", "Cash Flow", "2. Investing Activities", "Other Investing Activities", 226},{"netCashProvidedByInvestingActivities", "Cash Flow", "2. Investing Activities", "Net Cash Investing Summary", 227},{"shortTermNetDebtIssuance", "Cash Flow", "3. Financing Activities", "Short-term Debt Issuance Net", 241},{"longTermNetDebtIssuance", "Cash Flow", "3. Financing Activities", "Long-term Debt Issuance Net", 242},{"netDebtIssuance", "Cash Flow", "3. Financing Activities", "Total Net Debt Issuance", 243},{"commonStockIssuance", "Cash Flow", "3. Financing Activities", "Common Stock Issuance", 244},{"commonStockRepurchased", "Cash Flow", "3. Financing Activities", "Common Stock Repurchased", 245},{"netStockIssuance", "Cash Flow", "3. Financing Activities", "Total Net Stock Issuance", 246},{"netCommonStockIssuance", "Cash Flow", "3. Financing Activities", "Net Common Stock Issuance", 247},{"netPreferredStockIssuance", "Cash Flow", "3. Financing Activities", "Net Preferred Stock Issuance", 248},{"commonDividendsPaid", "Cash Flow", "3. Financing Activities", "Common Dividends Paid", 249},{"preferredDividendsPaid", "Cash Flow", "3. Financing Activities", "Preferred Dividends Paid", 250},{"netDividendsPaid", "Cash Flow", "3. Financing Activities", "Total Net Dividends Paid", 251},{"otherFinancingActivities", "Cash Flow", "3. Financing Activities", "Other Financing Activities", 252},{"netCashProvidedByFinancingActivities", "Cash Flow", "3. Financing Activities", "Net Cash Financing Summary", 253},{"effectOfForexChangesOnCash", "Cash Flow", "4. Summary & Metrics", "Forex Effect on Cash", 271},{"netChangeInCash", "Cash Flow", "4. Summary & Metrics", "Net Change in Cash", 272},{"cashAtBeginningOfPeriod", "Cash Flow", "4. Summary & Metrics", "Beginning Cash Position", 273},{"cashAtEndOfPeriod", "Cash Flow", "4. Summary & Metrics", "Ending Cash Position", 274},{"freeCashFlow", "Cash Flow", "4. Summary & Metrics", "Free Cash Flow Metric", 275},{"incomeTaxesPaid", "Cash Flow", "4. Summary & Metrics", "Income Taxes Paid (Cash)", 276},{"interestPaid", "Cash Flow", "4. Summary & Metrics", "Interest Paid (Cash)", 277}})
+				```
+
+	annotation PBI_Id = c47c63fb20494aa48638deed6dd525a7
+

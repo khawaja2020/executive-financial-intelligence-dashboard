@@ -1,0 +1,42 @@
+table dVersion
+	lineageTag: 99dd45fb-2e68-4dca-9279-11651c5f24d8
+
+	column VersionName
+		dataType: string
+		lineageTag: 9bd114c7-2a50-4815-a98b-13f9fcba3d9f
+		summarizeBy: none
+		sourceColumn: VersionName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column VersionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 63e7c7d7-7b4d-4cd7-8b27-b0061085bfc6
+		summarizeBy: none
+		sourceColumn: VersionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dVersion = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WckosTlVwBhJKsTrRSqEFxZkpSHyX/PI8JJFYAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [VersionName = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"VersionName", type text}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"Index", "VersionName"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"Index", "VersionKey"}})
+				in
+				    #"Renamed Columns"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

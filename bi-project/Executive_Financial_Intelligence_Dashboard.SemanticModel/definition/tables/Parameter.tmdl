@@ -1,0 +1,56 @@
+table Parameter
+	lineageTag: b3c5b98e-27ed-489e-838c-a502af925c47
+
+	column Parameter
+		lineageTag: afe066b5-9694-4579-a13f-f1d0a89008d6
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Fields'
+		lineageTag: 70221fd1-c561-49c0-9607-c87330f5fb2f
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Order'
+		formatString: 0
+		lineageTag: ba51d734-41cd-4feb-abfa-1745a90af4ac
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Parameter = calculated
+		mode: import
+		source =
+				{
+				    ("Ratio_AssetTurnover", NAMEOF('_CoreFinancialMetrics'[Ratio_AssetTurnover]), 0),
+				    ("Ratio_Current", NAMEOF('_CoreFinancialMetrics'[Ratio_Current]), 1),
+				    ("Ratio_DebtToEquity", NAMEOF('_CoreFinancialMetrics'[Ratio_DebtToEquity]), 2),
+				    ("Ratio_EquityMultiplier", NAMEOF('_CoreFinancialMetrics'[Ratio_EquityMultiplier]), 3),
+				    ("Ratio_GrossProfitMargin", NAMEOF('_CoreFinancialMetrics'[Ratio_GrossProfitMargin]), 4),
+				    ("Ratio_InterestCoverage", NAMEOF('_CoreFinancialMetrics'[Ratio_InterestCoverage]), 5),
+				    ("Ratio_NetProfitMargin", NAMEOF('_CoreFinancialMetrics'[Ratio_NetProfitMargin]), 6),
+				    ("Ratio_PriceToBook", NAMEOF('_CoreFinancialMetrics'[Ratio_PriceToBook]), 7),
+				    ("Ratio_Quick", NAMEOF('_CoreFinancialMetrics'[Ratio_Quick]), 8),
+				    ("Ratio_ReturnOnEquity_DuPont", NAMEOF('_CoreFinancialMetrics'[Ratio_ReturnOnEquity_DuPont]), 9),
+				    ("Revenue_YoY_Growth", NAMEOF('_CoreFinancialMetrics'[Revenue_YoY_Growth]), 10),
+				    ("Short_Term_Investments", NAMEOF('_CoreFinancialMetrics'[Short_Term_Investments]), 11)
+				}
+
+	annotation PBI_Id = bf8741ddb9374f86823b84cd87035d4d
+

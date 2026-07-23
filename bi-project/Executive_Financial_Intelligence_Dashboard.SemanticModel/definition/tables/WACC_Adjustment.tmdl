@@ -1,0 +1,27 @@
+table WACC_Adjustment
+	lineageTag: 5d8c54db-3c52-4097-9707-b1949c8dac57
+
+	measure 'WACC_Adjustment Value' = SELECTEDVALUE('WACC_Adjustment'[WACC_Adjustment], 0.10625)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 20793132-6376-4aed-b7e7-4fd47c3b0d01
+
+	column WACC_Adjustment
+		lineageTag: cb4c6b8f-6ec6-4fc7-9c1c-e65fc8522b7f
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition WACC_Adjustment = calculated
+		mode: import
+		source = GENERATESERIES(0.06, 0.14, 0.005)
+
+	annotation PBI_Id = 37532fc6bf3c4faf8b6b970f4fd3bc4c
+

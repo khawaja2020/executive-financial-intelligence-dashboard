@@ -1,0 +1,823 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "867725d23b002802a13e",
+  "position": {
+    "x": 9.1075711131934618,
+    "y": 0,
+    "z": 0,
+    "height": 719.49811794228356,
+    "width": 1271.1567110842875,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Executive Financial Intelligence Dashboard",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Power BI Architecture & Semantic Model Specification",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Executive Performance & Scenario Matrix (The \"C-Suite\" View)",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Core Objective",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Provide an interactive framework to compare multi-scenario performance (",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Actual vs. Budget vs. Forecast",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ") across dynamic time horizons, integrating 5-year Python-modeled regression valuations.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Key Visualizations",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ":",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Dynamic Financial Matrix",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Displays the ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Income Statement Hierarchy",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " as rows and ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "dScenario",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " as columns, driven by a ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Unified_Financial_Metric",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " measure.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Variance Waterfall Chart",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Bridges the structural gap between ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Actual ",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": "and ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Budget Targets",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " to isolate operational and macroeconomic variance drivers.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Dynamic UX Title Measure",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ":",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\t\t\t\t\t\t\t\t\t"
+                  },
+                  {
+                    "value": "dax",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\t\t\t\t\t\t\t\t\t\t"
+                  },
+                  {
+                    "value": "Dynamic_Title_Executive = ",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\t\t\t\t\t\t\t\t\t\t"
+                  },
+                  {
+                    "value": "SELECTEDVALUE('dScenario'[ScenarioName], \"Actual\") & \" Financial Summary for \" & ",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\t\t\t\t\t\t\t\t\t\t"
+                  },
+                  {
+                    "value": "IF(ISFILTERED('dCalendar'[Year]), SELECTEDVALUE('dCalendar'[Year]), \"All Years\")",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\t\t\t\t"
+                  },
+                  {
+                    "value": "Implementation",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif",
+                      "fontStyle": "italic"
+                    }
+                  },
+                  {
+                    "value": ":",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": " Bound via Conditional Formatting (",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "fx",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " button) to the visual title property for data-driven, context-aware reporting.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. Valuation & Strategic Planning (The \"Corporate Development\" View)",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Core Objective",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Model corporate valuation metrics to derive intrinsic ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Enterprise Value",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": " and ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Implied Share Price",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": " using discounted cash flows and terminal value calculations.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Key Visualizations",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ":",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Valuation Matrix",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Maps ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "dValuationMetrics",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " (Present Value of FCF, Present Value of Terminal Value via Gordon Growth Model, Implied Enterprise Value) against current Market Price and Book Value per Share.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Sensitivity Parameter (WACC)",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": A numeric field parameter allowing users to dynamically stress-test valuations by adjusting the ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Weighted Average Cost of Capital (WACC)",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": " between ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "6% and 14%",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "3. Capital Allocation & DCF Modeling (The \"Project ROI\" View)",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Core Objective",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Evaluate capital expenditure (CapEx) efficiency and project-level returns by tracking annual cash flows, payback timelines, and overall project returns.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Key Visualizations",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ":",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Strategic Scatter Plot",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Positions project portfolios by plotting ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Project ROI",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " (X-axis) against ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Payback Period",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " (Y-axis) to visually prioritize high-yield capital allocation.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "DCF Forecast Combo Chart",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": A line and clustered column chart contrasting ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Dynamic_Free_Cash_Flow",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " (bars) against ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Master_Discounted_FCF",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " (line) across the 2026–2030 planning horizon.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Interactive WACC Dropdown",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Leverages the valuation parameter to recalculate the multi-year project hurdle rate in real time.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "4. Automated AI Diagnostics & Deep-Dives",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Core Objective",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Embed native Power BI artificial intelligence to automatically identify and surface non-linear drivers of financial variances.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Key Visualizations",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ":",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Key Influencers Visual",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": Analyzes ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "Budget_Discount_Variance",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " against the ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": "dMacroAssumptions",
+                    "textStyle": {
+                      "fontFamily": "monospace"
+                    }
+                  },
+                  {
+                    "value": " dimension table to isolate the external economic levers causing the largest budget deviations.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Smart Narrative Commentary",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  },
+                  {
+                    "value": ": An inline, AI-generated summary positioned adjacent to the cash flow visuals to provide executives with immediate, natural-language variance explanations.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif"
+                    }
+                  }
+                ],
+                "listType": "bullet",
+                "indent": 1
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "40D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

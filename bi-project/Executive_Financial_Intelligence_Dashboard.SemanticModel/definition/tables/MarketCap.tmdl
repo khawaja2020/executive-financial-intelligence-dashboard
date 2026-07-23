@@ -1,0 +1,57 @@
+table MarketCap
+	lineageTag: eabef623-2699-421a-9014-ae28df7cd0e5
+
+	column Name
+		dataType: string
+		lineageTag: 664754b1-1d1d-4a19-a95d-9abe20d43948
+		summarizeBy: none
+		sourceColumn: Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: string
+		lineageTag: dcb58518-0429-4aa7-9f54-8b1bf2e3a14c
+		summarizeBy: none
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MarketCap
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3a27c8d1-7c21-4275-a691-e84517f2fa55
+		summarizeBy: sum
+		sourceColumn: MarketCap
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition MarketCap = m
+		mode: import
+		source =
+				let
+				    Source = Web.BrowserContents("https://finviz.com/stock?t=AAPL&p=d", [WaitFor=[Timeout=#duration(0, 0, 5, 0)]]),
+				    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", ".max-xl\:w-\[4\%\]"}, {"Column2", ".max-xl\:w-\[8\%\]"}}, [RowSelector=".table-dark-row"]),
+				    #"Transposed Table" = Table.Transpose(#"Extracted Table From Html"),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Transposed Table",{"Column2"}),
+				    #"Transposed Table1" = Table.Transpose(#"Removed Other Columns"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Transposed Table1",{{"Column1", "Name"}, {"Column2", "Amount"}}),
+				    #"Added Custom" = Table.AddColumn(#"Renamed Columns", "MarketCap", each 4811430000000),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Custom",{{"MarketCap", Currency.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,67 @@
+table fMarketData
+	excludeFromModelRefresh
+	lineageTag: 8e83e334-9d09-4a07-90e5-bdf12bbd04e5
+
+	column Price
+		dataType: string
+		lineageTag: a492975c-430a-4fd3-b354-586fcc8cf6be
+		summarizeBy: none
+		sourceColumn: Price
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: de821e5e-c6aa-4e23-8836-d37dc48d0d88
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition fMarketData = m
+		mode: import
+		source = ```
+				let
+				    // 1. Fetch raw page source safely using Web.Contents with your 5-minute timeout configuration
+				    RawHtml = Web.Contents(
+				        "https://finviz.com/stock?t=AAPL&p=d", 
+				        [Timeout=#duration(0, 0, 5, 0)]
+				    ),
+				    
+				    // 2. FIXED: Scrape directly from the raw binary source instead of passing it to Web.Page
+				    #"Extracted Table From Html" = Html.Table(RawHtml, {
+				        {"Column1", "TABLE.js-snapshot-table.snapshot-table2.screener_snapshot-table-body.max-xl\:table-fixed.xl\:table-auto:nth-child(6) > * > TR > :nth-child(1)"}, 
+				        {"Column2", "TABLE.js-snapshot-table.snapshot-table2.screener_snapshot-table-body.max-xl\:table-fixed.xl\:table-auto:nth-child(6) > * > TR > :nth-child(2)"}
+				    }, [RowSelector="TABLE.js-snapshot-table.snapshot-table2.screener_snapshot-table-body.max-xl\:table-fixed.xl\:table-auto:nth-child(6) > * > TR"]),
+				    
+				    // 3. Set proper data types
+				    #"Changed Type" = Table.TransformColumnTypes(#"Extracted Table From Html",{{"Column1", type text}, {"Column2", type number}}),
+				    
+				    // 4. Append today's date column 
+				    #"Added Today Date" = Table.AddColumn(#"Changed Type", "Date", each Date.From(DateTime.LocalNow()), type date),
+				    #"Transposed Table" = Table.Transpose(#"Added Today Date"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Transposed Table",{"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"Column13", "Date"}, {"Column14", "Price"}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns",{"Price"}),
+				    #"Transposed Table1" = Table.Transpose(#"Removed Columns1"),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Transposed Table1",{{"Column3", "Date"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns1",{{"Date", type date}}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Changed Type1",{{"Column2", "Price"}, {"Column1", "Ticker"}}),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Renamed Columns2",{"Ticker"})
+				in
+				    #"Removed Columns2"
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

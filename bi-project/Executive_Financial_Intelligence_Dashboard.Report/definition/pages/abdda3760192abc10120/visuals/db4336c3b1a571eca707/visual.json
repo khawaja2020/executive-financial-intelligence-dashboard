@@ -1,0 +1,250 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "db4336c3b1a571eca707",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 336.98013118815811,
+    "width": 1280.264282197481,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Clean Pop-Out Slicer Panel",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "This keeps the dashboard canvas uncluttered by building a collapsable filter pane:",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Insert a standard ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Shape",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " asset to act as your panel container. Place ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "dScenario",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ", ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "dVersion",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ", and ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "dCalendar",
+                    "textStyle": {
+                      "fontFamily": "monospace",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " slicers inside it.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Group the shape and the slicers together in the ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Selection Pane",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Use ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "Bookmarks",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " paired with action buttons to toggle the visibility of this group. Name the buttons ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "\"Filter Panel Open\"",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " and ",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": "\"Filter Panel Close\"",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  },
+                  {
+                    "value": " to create a clean user interface.",
+                    "textStyle": {
+                      "fontFamily": "Google Sans, Arial, sans-serif, Noto Color Emoji",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "40D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
