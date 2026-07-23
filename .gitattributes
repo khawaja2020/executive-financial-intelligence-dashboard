@@ -1,1 +1,2 @@
-"*.pbix linguist-language=DAX" 
+"*.pbix linguist-language=SQL" 
+"*.pbip linguist-language=SQL" 
